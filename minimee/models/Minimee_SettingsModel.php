@@ -70,8 +70,8 @@ class Minimee_SettingsModel extends BaseModel
 
 		if($cachePathEmpty != $cacheUrlEmpty)
 		{
-			$choose = ($cacheUrlEmpty) ? 'cachePath' : 'cacheUrl';
-			$this->addError($choose, Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
+			$this->addError('cachePath', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
+			$this->addError('cacheUrl', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
 		}
 	}
 
