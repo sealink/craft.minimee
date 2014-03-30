@@ -196,12 +196,4 @@ class Minimee_SettingsModel extends BaseModel
 
 		return parent::getAttribute($name);
 	}
-
-	/**
-	 * @return Bool
-	 */
-	public function exists()
-	{
-		return IOHelper::folderExists($this->cachePath);
-	}
 }
