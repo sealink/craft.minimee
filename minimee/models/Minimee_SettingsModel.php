@@ -111,7 +111,14 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		$value = parent::getAttribute('filesystemPath');
 
-		$filesystemPath = ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'];
+		if($value)
+		{
+			$filesystemPath = craft()->config->parseEnvironmentString($value);
+		}
+		else
+		{
+			$filesystemPath = $_SERVER['DOCUMENT_ROOT'];
+		}
 
 		return $this->forceTrailingSlash($filesystemPath);
 	}
@@ -123,7 +130,14 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		$value = parent::getAttribute('cachePath');
 
-		$cachePath = ($value) ? craft()->config->parseEnvironmentString($value) : craft()->path->getStoragePath() . 'minimee/';
+		if($value)
+		{
+			$cachePath = craft()->config->parseEnvironmentString($value);
+		}
+		else
+		{
+			$cachePath = craft()->path->getStoragePath() . 'minimee/';
+		}
 
 		return $this->forceTrailingSlash($cachePath);
 	}
@@ -135,7 +149,14 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		$value = parent::getAttribute('cacheUrl');
 
-		$cacheUrl = ($value) ? craft()->config->parseEnvironmentString($value) : UrlHelper::getResourceUrl('minimee');
+		if($value)
+		{
+			$cacheUrl = craft()->config->parseEnvironmentString($value);
+		}
+		else
+		{
+			$cacheUrl = UrlHelper::getResourceUrl('minimee');
+		}
 
 		return $this->forceTrailingSlash($cacheUrl);
 	}
@@ -161,7 +182,14 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		$value = parent::getAttribute('baseUrl');
 
-		$baseUrl = ($value) ? craft()->config->parseEnvironmentString($value) : craft()->getSiteUrl();
+		if($value)
+		{
+			$baseUrl = craft()->config->parseEnvironmentString($value);
+		}
+		else
+		{
+			$baseUrl = craft()->getSiteUrl();
+		}
 
 		return $this->forceTrailingSlash($baseUrl);
 	}
