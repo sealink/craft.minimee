@@ -11,6 +11,7 @@
     <testsuites>
         <testsuite name="Plugin Tests">
             <directory>models</directory>
+            <directory>services</directory>
         </testsuite>
     </testsuites>
 
