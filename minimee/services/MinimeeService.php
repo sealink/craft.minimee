@@ -95,7 +95,7 @@ class MinimeeService extends BaseApplicationComponent
 			}
 		}
 
-		Craft::log(Craft::t('Minimee has been initalised.'));
+		Craft::log(Craft::t('Minimee has been initialised.'));
 	}
 
 	/**
