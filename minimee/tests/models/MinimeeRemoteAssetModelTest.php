@@ -17,6 +17,13 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		require_once __DIR__ . '/../vendor/autoload.php';
 	}
 
+	public function testExistsIsAlwaysTrue()
+	{
+		$this->_populateWith(array());
+
+		$this->assertSame(true, $this->_model->exists());
+	}
+
 	public function testToStringReturnsFilename()
 	{
 		$this->_populateWith(array(
