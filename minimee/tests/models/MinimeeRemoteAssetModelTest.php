@@ -17,6 +17,15 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		require_once __DIR__ . '/../vendor/autoload.php';
 	}
 
+	public function testGetLastTimeModifiedIsAlwaysZero()
+	{
+		$this->_populateWith(array());
+
+		$lastTimeModified = $this->_model->lastTimeModified;
+
+		$this->assertSame(0, $lastTimeModified->getTimestamp());
+	}
+
 	public function testExistsIsAlwaysTrue()
 	{
 		$this->_populateWith(array());
