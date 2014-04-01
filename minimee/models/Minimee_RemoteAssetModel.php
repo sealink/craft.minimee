@@ -1,6 +1,7 @@
 <?php namespace Craft;
 
 use Guzzle\Http\Client;
+use Guzzle\Http\ClientInterface;
 
 /**
  * Minimee by John D Wells
@@ -18,6 +19,18 @@ use Guzzle\Http\Client;
  */
 class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 {
+	protected $_client;
+
+	public function __construct($attributes = array(), ClientInterface $client = null)
+	{
+		parent::__construct($attributes);
+
+		if($client)
+		{
+			$this->_client = $client;
+		}
+	}
+
 	/**
 	 * Get the contents of the remote asset.
 	 * 
@@ -27,12 +40,12 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	{
 		if( ! $this->_contents)
 		{
-			$client = new Client();
+			$client = $this->_getInstanceOfClient();
 			$request = $client->get($this->filenameUrl);
 			$response = $request->send();
 			if ($response->isSuccessful())
 			{
-				$this->_contents = $response->getBody();
+				$this->_contents = $response->getBody(true);
 			}
 			else
 			{
@@ -83,5 +96,20 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 		endswitch;
 
 		parent::setAttribute($name, $value);
+	}
+
+	/**
+	 * Either create a fresh instance of Guzzle\Http\Client, or pass the instance we were given during instantiation.
+	 */ 
+	protected function _getInstanceOfClient()
+	{
+		if($this->_client)
+		{
+			return $this->_client;
+		}
+		else
+		{
+			return new Client();
+		}
 	}
 }
