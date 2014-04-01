@@ -1,6 +1,9 @@
 <?php
 namespace Craft;
 
+use \Guzzle\Http\Client as Client;
+use \Guzzle\Plugin\Mock\MockPlugin as MockPlugin;
+use \Guzzle\Http\Message\Response as Response;
 use \Mockery as m;
 
 class MinimeeRemoteAssetModelTest extends BaseTest
@@ -15,6 +18,34 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 	public function setUp()
 	{
 		require_once __DIR__ . '/../vendor/autoload.php';
+	}
+
+	public function testGetContentsSendsRequestOnlyOnce()
+	{
+		$mock = new MockPlugin();
+		$mock->addResponse(new Response(200, array(), '* { color: red }'));
+		$mock->addResponse(new Response(404));
+
+		$client = new Client();
+		$client->addSubscriber($mock);
+
+		$remoteAsset = new Minimee_RemoteAssetModel(array(), $client);
+
+		$this->assertEquals('* { color: red }', $remoteAsset->contents);
+		$this->assertEquals('* { color: red }', $remoteAsset->contents);
+	}
+	
+	public function testGetContentsIfExists()
+	{
+		$mock = new MockPlugin();
+		$mock->addResponse(new Response(200, array(), '* { color: red }'));
+
+		$client = new Client();
+		$client->addSubscriber($mock);
+
+		$remoteAsset = new Minimee_RemoteAssetModel(array(), $client);
+
+		$this->assertEquals('* { color: red }', $remoteAsset->contents);
 	}
 
 	public function testGetLastTimeModifiedIsAlwaysZero()
