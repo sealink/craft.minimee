@@ -9,7 +9,7 @@
 	strict="false">
 
     <testsuites>
-        <testsuite name="Plugin Tests">
+        <testsuite name="MinimeeTests">
             <directory>models</directory>
             <directory>services</directory>
         </testsuite>
