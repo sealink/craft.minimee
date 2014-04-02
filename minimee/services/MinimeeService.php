@@ -442,56 +442,22 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Loads our requested library
+	 * Registers Minify_Loader, and tries to bump up PHP memory
 	 *
-	 * On first call it will adjust the include_path, for Minify support
-	 *
-	 * @param   string  Name of library to require
 	 * @return  void
 	 */
-	protected function loadLibrary($which)
+	protected function registerLoader()
 	{
 		if( is_null(self::$registeredMinifyLoader))
 		{
 			craft()->config->maxPowerCaptain();
 
-			require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php');
+			require_once CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php';
+
 			\Minify_Loader::register();
 
 			self::$registeredMinifyLoader = true;
 		}
-
-		switch ($which) :
-
-			case ('minify') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS.php');
-			break;
-
-			case ('cssmin') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/CSSmin.php');
-			break;
-			
-			case ('css_urirewriter') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS/UriRewriter.php');
-			break;
-
-			case ('curl') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/EpiCurl.php');
-			break;
-			
-			case ('jsmin') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMin.php');
-			break;
-			
-			case ('jsminplus') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMinPlus.php');
-			break;
-			
-			case ('html') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/HTML.php');
-			break;
-
-		endswitch;
 	}
 
 	/**
@@ -502,13 +468,14 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function minifyAsset($asset)
 	{
+		$this->registerLoader();
+
 		switch ($asset->type) :
 			
 			case 'js':
 
 				if($this->settings->minifyJsEnabled)
 				{
-					$this->loadLibrary('jsmin');
 					$contents = \JSMin::minify($asset->contents);
 				}
 				else
@@ -520,15 +487,12 @@ class MinimeeService extends BaseApplicationComponent
 			
 			case 'css':
 
-				$this->loadLibrary('css_urirewriter');
-
 				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 
 				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
 
 				if($this->settings->minifyJsEnabled)
 				{
-					$this->loadLibrary('minify');
 					$contents = \Minify_CSS::minify($contents);
 				}
 
