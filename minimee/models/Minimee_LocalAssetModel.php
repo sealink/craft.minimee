@@ -61,7 +61,14 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	 */
 	public function exists()
 	{
-		return IOHelper::fileExists($this->filenamePath);
+		$realPath = IOHelper::fileExists($this->filenamePath);
+
+		if($realPath && $realPath !== $this->filenamePath)
+		{
+			$this->filenamePath = $realPath;
+		}
+
+		return (bool) $realPath;
 	}
 
 	/**
