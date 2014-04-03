@@ -34,6 +34,24 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
 	}
+
+	/**
+     * @expectedException Exception
+     */
+	public function testGetContentsIfNotExists()
+	{
+		$mock = new MockPlugin();
+		$mock->addResponse(new Response(404));
+
+		$client = new Client();
+		$client->addSubscriber($mock);
+
+		$remoteAsset = new Minimee_RemoteAssetModel(array(
+			'filenamePath' => 'http://domain.dev/thisfilewillnotexist'
+		), $client);
+
+		$contents = $remoteAsset->contents;
+	}
 	
 	public function testGetContentsIfExists()
 	{
