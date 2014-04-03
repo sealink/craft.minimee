@@ -6,4 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'SelvinOrtiz\\Zit' => array($vendorDir . '/selvinortiz/zit/src'),
+    'SelvinOrtiz' => array($baseDir . '/src'),
 );
