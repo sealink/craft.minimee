@@ -28,6 +28,7 @@
 			<directory suffix=".php">bin</directory>
 			<directory suffix=".php">vendor</directory>
 			<directory suffix=".php">mocks</directory>
+			<directory suffix=".php">assets</directory>
 			<directory suffix=".php">report</directory>
 		</blacklist>
 	</filter>

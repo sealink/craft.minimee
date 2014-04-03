@@ -17,13 +17,86 @@ class MinimeeLocalAssetModelTest extends BaseTest
 		require_once __DIR__ . '/../vendor/autoload.php';
 	}
 
+	/**
+     * @expectedException Exception
+     */
+	public function testGetContentsWhenNotExists()
+	{
+		$this->_populateWith(array(
+			'filenamePath' => __DIR__ . '/../assets/404.txt'
+		));
+
+		$contents = $this->_model->contents;
+	}
+
+	public function testGetContentsWhenExists()
+	{
+		$this->_populateWith(array(
+			'filenamePath' => __DIR__ . '/../assets/200.txt'
+		));
+
+		$this->assertEquals('200', $this->_model->contents);
+	}
+
+	public function testExistsUpdatesFilenamePath()
+	{
+		$filenamePath = __DIR__ . '/../assets/200.txt';
+
+		$this->_populateWith(array(
+			'filenamePath' => $filenamePath
+		));
+
+		$this->_model->exists();
+
+		$this->assertNotEquals($filenamePath, $this->_model->filenamePath);
+	}
+
+	public function testGetTimestampWhenExists()
+	{
+		$this->_populateWith(array(
+			'filenamePath' => __DIR__ . '/../assets/200.txt'
+		));
+
+		$this->assertInstanceOf('DateTime', $this->_model->lastTimeModified);
+	}
+
+	/**
+     * @expectedException Exception
+     */
+	public function testGetTimestampWhenNotExists()
+	{
+		$this->_populateWith(array(
+			'filenamePath' => __DIR__ . '/../assets/404.txt'
+		));
+
+		$lastTimeModified = $this->_model->lastTimeModified;
+	}
+
+	public function testExistsIsTrue()
+	{
+		$this->_populateWith(array(
+			'filenamePath' => __DIR__ . '/../assets/200.txt'
+		));
+
+		$this->assertNotEquals(false, $this->_model->exists());
+	}
+
+	public function testExistsIsFalse()
+	{
+		$this->_populateWith(array(
+			'filenamePath' => __DIR__ . '/../assets/404.txt'
+		));
+
+		$this->assertNotEquals(true, $this->_model->exists());
+	}
+
 	public function testToStringReturnsFilename()
 	{
 		$this->_populateWith(array(
-			'filename' => '/assets/style.css'
+			'filename' => '/assets/200.txt'
 		));
 
-		$this->assertEquals('/assets/style.css', sprintf($this->_model));
+		$this->assertEquals('/assets/200.txt', sprintf($this->_model));
 	}
 
 	public function testSetFilenamePathRemovesDoubleSlashes()
