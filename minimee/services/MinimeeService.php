@@ -442,25 +442,6 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Registers Minify_Loader, and tries to bump up PHP memory
-	 *
-	 * @return  void
-	 */
-	protected function registerLoader()
-	{
-		if( is_null(self::$registeredMinifyLoader))
-		{
-			craft()->config->maxPowerCaptain();
-
-			require_once CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php';
-
-			\Minify_Loader::register();
-
-			self::$registeredMinifyLoader = true;
-		}
-	}
-
-	/**
 	 * Given an asset, fetches and returns minified contents.
 	 *
 	 * @param Minimee_AssetBaseModel $asset
@@ -468,7 +449,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function minifyAsset($asset)
 	{
-		$this->registerLoader();
+		craft()->config->maxPowerCaptain();
 
 		switch ($asset->type) :
 			

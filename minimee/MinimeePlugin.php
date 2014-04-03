@@ -64,6 +64,8 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function init()
 	{
+		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
+
 		craft()->on('minimee.createCache', function(Event $event) {
 			if(craft()->config->get('devMode'))
 			{
