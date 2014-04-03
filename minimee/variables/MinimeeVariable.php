@@ -52,15 +52,15 @@ class MinimeeVariable
 	{
 		Craft::log(Craft::t('MinimeeVariable::' . $type . '() is being run now.'));
 
-		$minified = craft()->minimee->$type($assets, $settings);
+		$minified = minimee()->service->$type($assets, $settings);
 
 		if( ! $minified)
 		{
-			$html = craft()->minimee->makeTagsByType($type, $assets);
-			return craft()->minimee->returnHtmlAsTwigMarkup($html);
+			$html = minimee()->service->makeTagsByType($type, $assets);
+			return minimee()->service->returnHtmlAsTwigMarkup($html);
 		}
 
-		$html = craft()->minimee->makeTagsByType($type, $minified);
-		return craft()->minimee->returnHtmlAsTwigMarkup($html);
+		$html = minimee()->service->makeTagsByType($type, $minified);
+		return minimee()->service->returnHtmlAsTwigMarkup($html);
 	}
 }

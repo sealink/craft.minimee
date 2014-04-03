@@ -76,9 +76,7 @@ class MinimeeService extends BaseApplicationComponent
 
 		if(is_null(self::$initSettings))
 		{
-			$plugin = craft()->plugins->getPlugin('minimee');
-
-			$pluginSettings = $plugin->getSettings()->getAttributes();
+			$pluginSettings = minimee()->plugin->getSettings()->getAttributes();
 
 			self::$initSettings = $pluginSettings;
 
@@ -260,7 +258,7 @@ class MinimeeService extends BaseApplicationComponent
 		
 		foreach($this->assets as $asset)
 		{
-			$contents .= craft()->minimee->minifyAsset($asset) . "\n";
+			$contents .= $this->minifyAsset($asset) . "\n";
 		}
 
 		IOHelper::writeToFile($this->cacheFilenamePath, $contents);

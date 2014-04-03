@@ -66,10 +66,13 @@ class MinimeePlugin extends BasePlugin
 	{
 		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
 
+		minimee()->stash('plugin', $this);
+		minimee()->stash('service', craft()->minimee);
+
 		craft()->on('minimee.createCache', function(Event $event) {
 			if(craft()->config->get('devMode'))
 			{
-				craft()->minimee->deleteExpiredCache();
+				minimee()->service->deleteExpiredCache();
 			}
 		});
 	}
@@ -143,7 +146,18 @@ class MinimeePlugin extends BasePlugin
 	function registerCachePaths()
 	{
 		return array(
-			craft()->minimee->settings->cachePath => Craft::t('Minimee caches')
+			minimee()->service->settings->cachePath => Craft::t('Minimee caches')
 		);
+	}
+}
+
+/**
+ * A way to grab the dependency container within the Craft namespace
+ */
+if (!function_exists('\\Craft\\minimee'))
+{
+	function minimee()
+	{
+		return \SelvinOrtiz\Zit\Zit::getInstance();
 	}
 }
