@@ -20,7 +20,7 @@ class MinimeeLocalAssetModelTest extends BaseTest
 	/**
      * @expectedException Exception
      */
-	public function testGetContentsWhenNotExists()
+	public function testGetContentsThrowsExeptionWhenNotExists()
 	{
 		$this->_populateWith(array(
 			'filenamePath' => __DIR__ . '/../assets/404.txt'
