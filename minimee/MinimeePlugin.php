@@ -69,6 +69,15 @@ class MinimeePlugin extends BasePlugin
 		minimee()->stash('plugin', $this);
 		minimee()->stash('service', craft()->minimee);
 
+		$this->_bindEvents();
+	}
+
+	/**
+	 * 
+	 * @return void
+	 */
+	public function _bindEvents()
+	{
 		craft()->on('minimee.createCache', function(Event $event) {
 			if(craft()->config->get('devMode'))
 			{
