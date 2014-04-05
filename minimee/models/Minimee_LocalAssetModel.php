@@ -1,5 +1,7 @@
 <?php namespace Craft;
 
+require_once __DIR__ . '/Minimee_AssetModelInterface.php';
+
 /**
  * Minimee by John D Wells
  *
@@ -14,7 +16,7 @@
 /**
  * 
  */
-class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
+class Minimee_LocalAssetModel extends Minimee_AssetBaseModel implements Minimee_AssetModelInterface
 {
 	/**
 	 * Set our location based on contents of filename

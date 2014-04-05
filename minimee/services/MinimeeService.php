@@ -16,7 +16,7 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
-	protected $_assets                  = array();  // array of Minimee_AssetBaseModel
+	protected $_assets                  = array();  // array of Minimee_AssetModelInterface
 	protected $_type                    = '';       // css or js
 	protected $_cacheHash               = '';       // a hash of all asset filenames together
 	protected $_cacheTimestamp          = '';       // timestamp of cache

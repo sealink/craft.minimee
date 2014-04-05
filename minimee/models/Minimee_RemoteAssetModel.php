@@ -1,5 +1,7 @@
 <?php namespace Craft;
 
+require_once __DIR__ . '/Minimee_AssetModelInterface.php';
+
 use Guzzle\Http\Client;
 use Guzzle\Http\ClientInterface;
 
@@ -17,7 +19,7 @@ use Guzzle\Http\ClientInterface;
 /**
  * 
  */
-class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
+class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel implements Minimee_AssetModelInterface
 {
 	protected $_client;
 
