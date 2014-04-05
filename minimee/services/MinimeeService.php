@@ -23,7 +23,6 @@ class MinimeeService extends BaseApplicationComponent
 	protected $_settings                = null;     // instance of Minimee_SettingsModel
 
 	protected static $initSettings;					// static array of settings, a merge of DB and filesystem settings
-	protected static $registeredMinifyLoader;       // Internal flag indicating if we've registered the Minify Loader class
 
 
 	/*================= PUBLIC METHODS ================= */
