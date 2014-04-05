@@ -7,6 +7,8 @@ class MinimeeServiceTest extends BaseTest
 {
 	public function setUp()
 	{
+		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
+		
 		$this->autoload();
 
         // $this->config = m::mock('Craft\ConfigService');

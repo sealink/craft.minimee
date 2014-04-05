@@ -17,6 +17,8 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 	 */
 	public function setUp()
 	{
+		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
+		
 		require_once __DIR__ . '/../vendor/autoload.php';
 	}
 
