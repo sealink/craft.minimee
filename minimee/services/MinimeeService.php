@@ -19,10 +19,10 @@ class MinimeeService extends BaseApplicationComponent
 	protected $_assets                  = array();  // array of Minimee_AssetModelInterface
 	protected $_type                    = '';       // css or js
 	protected $_cacheHash               = '';       // a hash of all asset filenames together
-	protected $_cacheTimestamp          = '';       // timestamp of cache
+	protected $_cacheTimestamp          = 0;       // timestamp of cache
 	protected $_settings                = null;     // instance of Minimee_SettingsModel
 
-	protected static $initSettings;					// static array of settings, a merge of DB and filesystem settings
+	protected static $_pluginSettings	= array();		// static array of settings, a merge of DB and filesystem settings
 
 
 	/*================= PUBLIC METHODS ================= */
