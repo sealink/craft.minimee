@@ -165,19 +165,19 @@ class MinimeeSettingsModelTest extends BaseTest
 	public function testGetCacheUrlWithoutValue()
 	{
 		// Attempt 1: Try alias mocking
-		// $mock = m::mock('alias:Craft\IOHelper');
-		// $mock->shouldReceive('getResourceUrl')->andReturn('http://domain.com/resources/minimee/');
+		// $urlHelper = m::mock('alias:\Craft\UrlHelper');
+		// $urlHelper->shouldReceive('getResourceUrl')->andReturn('http://domain.com/resources/minimee/');
 
 		// Attempt 2: Try to mock via PHPUnit
-		// $IOHelper = $this->getMockClass(
-		// 	'Craft\IOHelper',          /* name of class to mock     */
-		// 	array('getResourceUrl') /* list of methods to mock   */
+		// $UrlHelper = $this->getMockClass(
+		// 	'Craft\UrlHelper',          // name of class to mock
+		// 	array('getResourceUrl') 	// list of methods to mock
 		// );
-		// $IOHelper::staticExpects($this->any())
+		// $UrlHelper::staticExpects($this->any())
 		// 	->method('getResourceUrl')
 		// 	->will($this->returnValue('http://domain.com/resources/minimee/'));
  
- 		// Until we can successfully mock IOHelper::getResourceUrl(),
+ 		// Until we can successfully mock UrlHelper::getResourceUrl(),
  		// the below relies on the contents of craft/app/tests/bootstrap.php
 		$this->_populateWith(array());
 		$this->assertEquals('http://craft.dev/cpresources/minimee/', $this->_model->cacheUrl);
