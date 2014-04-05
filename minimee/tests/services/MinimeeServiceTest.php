@@ -85,6 +85,121 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals(sha1(''), $getCacheHash->invoke(minimee()->service));
 	}
 
+	public function testMakeTagsByTypePassingCssStringUsingDefaultTemplate()
+	{
+		$css = 'http://domain.dev/cache/filename.hash.css';
+		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
+
+		$rendered = sprintf($cssTagTemplate, $css);
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $css));
+	}
+
+	public function testMakeTagsByTypePassingCssArrayUsingDefaultTemplate()
+	{
+		$cssArray = array(
+			'http://domain.dev/cache/filename.hash1.css',
+			'http://domain.dev/cache/filename.hash2.css'
+		);
+		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
+
+		$rendered = '';
+		foreach($cssArray as $css)
+		{
+			$rendered .= sprintf($cssTagTemplate, $css);
+		}
+
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $cssArray));
+	}
+
+	public function testMakeTagsByTypePassingCssStringUsingCustomTemplate()
+	{
+		$css = 'http://domain.dev/cache/filename.hash.css';
+		$cssTagTemplate = '<link rel="stylesheet" type="text/css" media="screen" href="%s"/>';
+
+		minimee()->service->settings->cssTagTemplate = $cssTagTemplate;
+
+		$rendered = sprintf($cssTagTemplate, $css);
+
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $css));
+
+	}
+
+	public function testMakeTagsByTypePassingCssArrayUsingCustomTemplate()
+	{
+		$cssArray = array(
+			'http://domain.dev/cache/filename.hash1.css',
+			'http://domain.dev/cache/filename.hash2.css'
+		);
+		$cssTagTemplate = '<link rel="stylesheet" type="text/css" media="screen" href="%s"/>';
+
+		minimee()->service->settings->cssTagTemplate = $cssTagTemplate;
+
+		$rendered = '';
+		foreach($cssArray as $css)
+		{
+			$rendered .= sprintf($cssTagTemplate, $css);
+		}
+
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $cssArray));
+	}
+
+	public function testMakeTagsByTypePassingJsStringUsingDefaultTemplate()
+	{
+		$js = 'http://domain.dev/cache/filename.hash.js';
+		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
+
+		$rendered = sprintf($jsTagTemplate, $js);
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $js));
+	}
+
+	public function testMakeTagsByTypePassingJsArrayUsingDefaultTemplate()
+	{
+		$jsArray = array(
+			'http://domain.dev/cache/filename.hash1.js',
+			'http://domain.dev/cache/filename.hash2.js'
+		);
+		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
+
+		$rendered = '';
+		foreach($jsArray as $js)
+		{
+			$rendered .= sprintf($jsTagTemplate, $js);
+		}
+
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $jsArray));
+	}
+
+	public function testMakeTagsByTypePassingJsStringUsingCustomTemplate()
+	{
+		$js = 'http://domain.dev/cache/filename.hash.js';
+		$jsTagTemplate = '<script src="%s" type="text/javascript" defer></script>';
+
+		minimee()->service->settings->jsTagTemplate = $jsTagTemplate;
+
+		$rendered = sprintf($jsTagTemplate, $js);
+
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $js));
+	}
+
+	public function testMakeTagsByTypePassingJsArrayUsingCustomTemplate()
+	{
+		$jsArray = array(
+			'http://domain.dev/cache/filename.hash1.js',
+			'http://domain.dev/cache/filename.hash2.js'
+		);
+		$jsTagTemplate = '<script src="%s" type="text/javascript" defer></script>';
+
+		minimee()->service->settings->jsTagTemplate = $jsTagTemplate;
+
+		$rendered = '';
+		foreach($jsArray as $js)
+		{
+			$rendered .= sprintf($jsTagTemplate, $js);
+		}
+
+		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $jsArray));
+	}
+
 	public function dataProviderInvalidUrls()
 	{
 		return [
