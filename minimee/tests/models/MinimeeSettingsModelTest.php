@@ -180,7 +180,7 @@ class MinimeeSettingsModelTest extends BaseTest
  		// Until we can successfully mock IOHelper::getResourceUrl(),
  		// the below relies on the contents of craft/app/tests/bootstrap.php
 		$this->_populateWith(array());
-		$this->assertEquals('http://craft.dev/resources/minimee/', $this->_model->cacheUrl);
+		$this->assertEquals('http://craft.dev/cpresources/minimee/', $this->_model->cacheUrl);
 	}
 
 	public function testGetCacheUrlHasTrailingSlash()
