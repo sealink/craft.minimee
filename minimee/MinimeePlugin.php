@@ -110,7 +110,7 @@ class MinimeePlugin extends BasePlugin
 
 		return craft()->templates->render('minimee/settings', array(
 			'settings' => $this->getSettings(),
-			'filesystemConfigExists' => IOHelper::fileExists($filesystemConfigPath)
+			'filesystemConfigExists' => (bool) IOHelper::fileExists($filesystemConfigPath)
 
 		));
 	}
