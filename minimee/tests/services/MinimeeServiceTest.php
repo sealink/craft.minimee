@@ -46,6 +46,45 @@ class MinimeeServiceTest extends BaseTest
 		// require_once __DIR__ . '/../../models/Minimee_SettingsModel.php';
 	}
 
+	public function testSetCacheTimestampAlwaysSetsMax()
+	{
+		$dt = new DateTime('now');
+		$nowTimestamp = $dt->getTimestamp();
+
+		minimee()->service->cacheTimestamp = $dt;
+		$this->assertEquals($nowTimestamp, minimee()->service->cacheTimestamp);
+
+		// reduce by a day
+		$dt->modify("-1 day");
+		$yesterdayTimestamp = $dt->getTimestamp();
+
+		minimee()->service->cacheTimestamp = $dt;
+		$this->assertEquals($nowTimestamp, minimee()->service->cacheTimestamp);
+
+		// increase by 2 days
+		$dt->modify("+2 day");
+		$tomorrowTimestamp = $dt->getTimestamp();
+
+		minimee()->service->cacheTimestamp = $dt;
+		$this->assertEquals($tomorrowTimestamp, minimee()->service->cacheTimestamp);
+
+		// test that setting it to the same value has no ill effect
+		minimee()->service->cacheTimestamp = $dt;
+		$this->assertEquals($tomorrowTimestamp, minimee()->service->cacheTimestamp);
+	}
+
+	public function testGetCacheTimestampWhenZeroReturnsPaddedZeros()
+	{
+		$getCacheTimestamp = $this->getMethod(minimee()->service, 'getCacheTimestamp');
+		$this->assertEquals('00000000', $getCacheTimestamp->invoke(minimee()->service));
+	}
+
+	public function testGetCacheHashIsEncrypted()
+	{
+		$getCacheHash = $this->getMethod(minimee()->service, 'getCacheHash');
+		$this->assertEquals(sha1(''), $getCacheHash->invoke(minimee()->service));
+	}
+
 	public function dataProviderInvalidUrls()
 	{
 		return [
