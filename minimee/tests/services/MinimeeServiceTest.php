@@ -200,6 +200,18 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $jsArray));
 	}
 
+	public function testReset()
+	{
+		$reset = $this->getMethod(minimee()->service, 'reset');
+		$reset->invoke(minimee()->service);
+
+		$this->assertEquals(array(), minimee()->service->assets);
+		$this->assertInstanceOf('\Craft\Minimee_SettingsModel', minimee()->service->settings);
+		$this->assertEquals('', minimee()->service->type);
+		$this->assertEquals(sha1(''), minimee()->service->cacheHash);
+		$this->assertEquals('00000000', minimee()->service->cacheTimestamp);
+	}
+
 	public function dataProviderInvalidUrls()
 	{
 		return [
