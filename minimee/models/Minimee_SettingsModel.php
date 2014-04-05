@@ -90,8 +90,8 @@ class Minimee_SettingsModel extends BaseModel
 			'combineJsEnabled' 	=> array(AttributeType::Bool, 'default' => true),
 			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
 			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'cssTagTemplate' 	=> AttributeType::String,
-			'jsTagTemplate' 	=> AttributeType::String,
+			'cssTagTemplate' 	=> array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s"/>'),
+			'jsTagTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>')
 		);
 	}
 

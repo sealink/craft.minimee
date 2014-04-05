@@ -126,14 +126,14 @@ class MinimeeService extends BaseApplicationComponent
 			{
 				case ('css') :
 
-					$cssTagTemplate = $this->settings->cssTagTemplate ?: '<link rel="stylesheet" href="%s"/>';
+					$cssTagTemplate = $this->settings->cssTagTemplate;
 					$tags .= sprintf($cssTagTemplate, $asset);
 
 				break;
 
 				case ('js') :
 
-					$jsTagTemplate = $this->settings->jsTagTemplate ?: '<script src="%s"></script>';
+					$jsTagTemplate = $this->settings->jsTagTemplate;
 					$tags .= sprintf($jsTagTemplate, $asset);
 
 				break;
