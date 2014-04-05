@@ -265,7 +265,7 @@ class MinimeeService extends BaseApplicationComponent
 	 *
 	 * @return Bool
 	 */
-	protected function doCombine()
+	protected function isCombineEnabled()
 	{
 		switch($this->type)
 		{
@@ -525,7 +525,7 @@ class MinimeeService extends BaseApplicationComponent
 				 ->checkHeaders();
 
 			$return = array();
-			if($this->doCombine())
+			if($this->isCombineEnabled())
 			{
 				$return[] = $this->cache();
 			}
