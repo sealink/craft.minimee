@@ -152,6 +152,53 @@ class MinimeeService extends BaseApplicationComponent
 		return new \Twig_Markup($html, $charset);
 	}
 
+	/**
+	 * Main service function that encapsulates an entire Minimee run
+	 *
+	 * @param String $type
+	 * @param Array $assets
+	 * @param Array $settings
+	 * @return Array|Bool
+	 */
+	public function run($type, $assets, $settings = array())
+	{
+		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
+		$settings = ( ! is_array($settings)) ? array($settings) : $settings;
+
+		try
+		{
+			$this->reset()
+				 ->setSettings($settings)
+				 ->setType($type)
+				 ->setAssets($assets)
+				 ->flightcheck()
+				 ->checkHeaders();
+
+			$return = array();
+			if($this->isCombineEnabled())
+			{
+				$return[] = $this->cache();
+			}
+			else
+			{
+				foreach($assets as $asset)
+				{
+					$return[] = $this->reset()
+									 ->setSettings($settings)
+									 ->setType($type)
+									 ->setAssets($asset)
+									 ->cache();
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+			return $this->abort($e);
+		}
+
+		return $return;
+	}
+
 
 	/*================= PROTECTED METHODS ================= */
 
@@ -270,11 +317,11 @@ class MinimeeService extends BaseApplicationComponent
 		switch($this->type)
 		{
 			case 'css' :
-				return $this->settings->combineCssEnabled;
+				return (bool) $this->settings->combineCssEnabled;
 			break;
 
 			case 'js' :
-				return $this->settings->combineJsEnabled;
+				return (bool) $this->settings->combineJsEnabled;
 			break;
 		}
 	}
@@ -286,7 +333,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function flightcheck()
 	{
-		if ($this->settings === null)
+		if ( ! self::$_pluginSettings)
 		{
 			throw new Exception(Craft::t('Minimee is not installed.'));
 		}
@@ -322,6 +369,16 @@ class MinimeeService extends BaseApplicationComponent
 		if( ! IOHelper::isWritable($this->settings->cachePath))
 		{
 			throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
+		}
+
+		if( ! $this->_assets)
+		{
+			throw new Exception(Craft::t('Minimee has no assets to operate upon.'));
+		}
+
+		if( ! $this->type)
+		{
+			throw new Exception(Craft::t('Minimee has no value for `type`.'));
 		}
 
 		return $this;
@@ -503,53 +560,6 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Main service function that encapsulates an entire Minimee run
-	 *
-	 * @param String $type
-	 * @param Array $assets
-	 * @param Array $settings
-	 * @return Array|Bool
-	 */
-	protected function run($type, $assets, $settings = array())
-	{
-		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
-		$settings = ( ! is_array($settings)) ? array($settings) : $settings;
-
-		try
-		{
-			$this->reset()
-				 ->setSettings($settings)
-				 ->setType($type)
-				 ->setAssets($assets)
-				 ->flightcheck()
-				 ->checkHeaders();
-
-			$return = array();
-			if($this->isCombineEnabled())
-			{
-				$return[] = $this->cache();
-			}
-			else
-			{
-				foreach($assets as $asset)
-				{
-					$return[] = $this->reset()
-									 ->setSettings($settings)
-									 ->setType($type)
-									 ->setAssets($asset)
-									 ->cache();
-				}
-			}
-		}
-		catch (Exception $e)
-		{
-			return $this->abort($e);
-		}
-
-		return $return;
-	}
-
-	/**
 	 * @param Array $assets
 	 * @return this
 	 */
@@ -632,6 +642,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function setType($type)
 	{
+
 		$this->type = strtolower($type);
 
 		return $this;
