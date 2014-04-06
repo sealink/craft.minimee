@@ -27,6 +27,30 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
+	public function testCssCallsRun()
+	{
+		$css = array(
+			'assets/css/style.css'
+		);
+		$settings = array();
+		$s = m::mock('Craft\MinimeeService')->makePartial();
+		$s->shouldReceive('run')->with('css', $css, $settings)->andReturn(true);
+
+		$this->assertTrue($s->css($css, $settings));
+	}
+
+	public function testJsCallsRun()
+	{
+		$js = array(
+			'assets/js/app.js'
+		);
+		$settings = array();
+		$s = m::mock('Craft\MinimeeService')->makePartial();
+		$s->shouldReceive('run')->with('js', $js, $settings)->andReturn(true);
+
+		$this->assertTrue($s->js($js, $settings));
+	}
+
 	public function testIsCombineEnabledWhenTrue()
 	{
 		minimee()->service->type = 'css';
