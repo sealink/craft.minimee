@@ -8,7 +8,7 @@ class MinimeeServiceTest extends BaseTest
 	public function setUp()
 	{
 		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
-		
+
 		$this->autoload();
 
         // $this->config = m::mock('Craft\ConfigService');
@@ -44,6 +44,36 @@ class MinimeeServiceTest extends BaseTest
 		// require_once __DIR__ . '/../../models/Minimee_LocalAssetModel.php';
 		// require_once __DIR__ . '/../../models/Minimee_RemoveAssetModel.php';
 		// require_once __DIR__ . '/../../models/Minimee_SettingsModel.php';
+	}
+
+	public function testIsCombineEnabledWhenTrue()
+	{
+		minimee()->service->type = 'css';
+		minimee()->service->settings->combineCssEnabled = true;
+
+		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
+
+		$this->assertTrue($isCombineEnabled->invoke(minimee()->service));
+	}
+
+	public function testIsCombineEnabledWhenFalse()
+	{
+		minimee()->service->type = 'css';
+		minimee()->service->settings->combineCssEnabled = false;
+
+		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
+
+		$this->assertFalse($isCombineEnabled->invoke(minimee()->service));
+	}
+
+	public function testIsCombineEnabledNullWithoutType()
+	{
+		$reset = $this->getMethod(minimee()->service, 'reset');
+		$reset->invoke(minimee()->service);
+
+		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
+
+		$this->assertEquals(null, $isCombineEnabled->invoke(minimee()->service));
 	}
 
 	public function testSetCacheTimestampAlwaysSetsMax()
@@ -247,7 +277,6 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertTrue($isUrl->invokeArgs(minimee()->service, array($url)));
 	}
 }
-
 
 /**
  * A way to grab the dependency container within the Craft namespace
