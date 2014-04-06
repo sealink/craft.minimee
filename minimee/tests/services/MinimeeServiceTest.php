@@ -27,25 +27,6 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
-	public function autoload()
-	{
-		// our tests use this
-		require_once __DIR__ . '/../../library/vendor/autoload.php';
-
-		// These are usually automatically loaded by Craft
-		require_once __DIR__ . '/../../MinimeePlugin.php';
-		require_once __DIR__ . '/../../services/MinimeeService.php';
-
-		// this usually happens in MinimeePlugin::init()
-		require_once __DIR__ . '/../vendor/autoload.php';
-
-		// And these Craft can usually autoload
-		// require_once __DIR__ . '/../../models/Minimee_AssetBaseModel.php';
-		// require_once __DIR__ . '/../../models/Minimee_LocalAssetModel.php';
-		// require_once __DIR__ . '/../../models/Minimee_RemoveAssetModel.php';
-		// require_once __DIR__ . '/../../models/Minimee_SettingsModel.php';
-	}
-
 	public function testIsCombineEnabledWhenTrue()
 	{
 		minimee()->service->type = 'css';
@@ -275,6 +256,25 @@ class MinimeeServiceTest extends BaseTest
 	{
 		$isUrl = $this->getMethod(minimee()->service, 'isUrl');
 		$this->assertTrue($isUrl->invokeArgs(minimee()->service, array($url)));
+	}
+
+	protected function autoload()
+	{
+		// our tests use this
+		require_once __DIR__ . '/../../library/vendor/autoload.php';
+
+		// These are usually automatically loaded by Craft
+		require_once __DIR__ . '/../../MinimeePlugin.php';
+		require_once __DIR__ . '/../../services/MinimeeService.php';
+
+		// this usually happens in MinimeePlugin::init()
+		require_once __DIR__ . '/../vendor/autoload.php';
+
+		// And these Craft can usually autoload
+		// require_once __DIR__ . '/../../models/Minimee_AssetBaseModel.php';
+		// require_once __DIR__ . '/../../models/Minimee_LocalAssetModel.php';
+		// require_once __DIR__ . '/../../models/Minimee_RemoveAssetModel.php';
+		// require_once __DIR__ . '/../../models/Minimee_SettingsModel.php';
 	}
 }
 
