@@ -371,7 +371,7 @@ class MinimeeService extends BaseApplicationComponent
 			throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
 		}
 
-		if( ! $this->_assets)
+		if( ! $this->assets)
 		{
 			throw new Exception(Craft::t('Minimee has no assets to operate upon.'));
 		}
