@@ -27,6 +27,13 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
+	public function testSetTypeCastsString()
+	{
+		$setType = $this->getMethod(minimee()->service, 'setType');
+		$setType->invokeArgs(minimee()->service, array('CSS'));
+		$this->assertSame('css', minimee()->service->type);
+	}
+
 	public function testCssCallsRun()
 	{
 		$css = array(
