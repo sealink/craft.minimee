@@ -62,7 +62,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		}
 
 		// hand off the rest to our service
-		$minified = minimee()->service->$type($assets, $settings);
+		$minified = minimee()->service->run($type, $assets, $settings);
 
 		// false means we failed, so return original markup
 		if( ! $minified)
@@ -86,12 +86,12 @@ class MinimeeTwigExtension extends \Twig_Extension
 	{
 		if(strpos($html, '<link') !== FALSE)
 		{
-			return 'css';
+			return Minimee_AssetBaseModel::TypeCSS;
 		}
 
 		if(strpos($html, '<script') !== FALSE)
 		{
-			return 'js';
+			return Minimee_AssetBaseModel::TypeJS;
 		}
 
 		return FALSE;
@@ -109,11 +109,11 @@ class MinimeeTwigExtension extends \Twig_Extension
 	{
 		switch (strtolower($type)) :
 
-			case 'css' :
+			case Minimee_AssetBaseModel::TypeCSS :
 				$pat = "/<link{1}.*?href=['|\"']{1}(.*?)['|\"]{1}[^>]*>/i";
 			break;
 
-			case 'js' :
+			case Minimee_AssetBaseModel::TypeJS :
 				$pat = "/<script{1}.*?src=['|\"]{1}(.*?)['|\"]{1}[^>]*>(.*?)<\/script>/i";
 			break;
 

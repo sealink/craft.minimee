@@ -16,6 +16,9 @@
  */
 class Minimee_AssetBaseModel extends BaseModel
 {
+	const TypeCSS = 'css';
+	const TypeJS  = 'js';
+
 	/*
 	 * These are internal attributes only, not defined by Minimee_AssetBaseModel::defineAttributes()
 	 * They are read-only, accessiable via magic getters e.g. $asset->contents
@@ -42,7 +45,7 @@ class Minimee_AssetBaseModel extends BaseModel
 			'filename'      => AttributeType::String,
 			'filenamePath'  => AttributeType::String,
 			'filenameUrl'   => AttributeType::String,
-			'type'          => array(AttributeType::Enum, 'values' => "css,js")
+			'type'          => array(AttributeType::Enum, 'values' => self::TypeCSS . ',' . self::TypeJS)
 		);
 	}
 

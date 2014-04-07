@@ -25,7 +25,7 @@ class MinimeeVariable
 	 */
 	public function css($assets, $settings = array())
 	{
-		return $this->_run('css', $assets, $settings);
+		return $this->_run(Minimee_AssetBaseModel::TypeCSS, $assets, $settings);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class MinimeeVariable
 	 */
 	public function js($assets, $settings = array())
 	{
-		return $this->_run('js', $assets, $settings);
+		return $this->_run(Minimee_AssetBaseModel::TypeJS, $assets, $settings);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class MinimeeVariable
 	{
 		Craft::log(Craft::t('MinimeeVariable::' . $type . '() is being run now.'));
 
-		$minified = minimee()->service->$type($assets, $settings);
+		$minified = minimee()->service->run($type, $assets, $settings);
 
 		if( ! $minified)
 		{
