@@ -194,6 +194,32 @@ class Minimee_SettingsModel extends BaseModel
 		return $this->forceTrailingSlash($baseUrl);
 	}
 
+	public function getCssTagTemplate()
+	{
+		$value = parent::getAttribute('cssTagTemplate');
+
+		if( ! $value)
+		{
+			$attributes = $this->defineAttributes();
+			return $attributes['cssTagTemplate']['default'];
+		}
+
+		return $value;
+	}
+
+	public function getJsTagTemplate()
+	{
+		$value = parent::getAttribute('jsTagTemplate');
+
+		if( ! $value)
+		{
+			$attributes = $this->defineAttributes();
+			return $attributes['jsTagTemplate']['default'];
+		}
+
+		return $value;
+	}
+
 	/**
 	 * Inject our model attribute accessors.
 	 *
@@ -204,6 +230,10 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		switch($name) :
 
+			case('baseUrl') :
+				return $this->getBaseUrl();			
+			break;
+
 			case('cachePath') :
 				return $this->getCachePath();			
 			break;
@@ -211,13 +241,16 @@ class Minimee_SettingsModel extends BaseModel
 			case('cacheUrl') :
 				return $this->getCacheUrl();			
 			break;
-
-			case('baseUrl') :
-				return $this->getBaseUrl();			
+			case('cssTagTemplate') :
+				return $this->getCssTagTemplate();
 			break;
 
 			case('filesystemPath') :
 				return $this->getFilesystemPath();			
+			break;
+
+			case('jsTagTemplate') :
+				return $this->getJsTagTemplate();
 			break;
 
 		endswitch;

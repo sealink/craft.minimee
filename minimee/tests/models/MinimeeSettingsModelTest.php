@@ -19,6 +19,31 @@ class MinimeeSettingsModelTest extends BaseTest
 		require_once __DIR__ . '/../vendor/autoload.php';
 	}
 
+	public function testGetTagTemplatesWhenEmpty()
+	{
+		$this->_populateWith(array(
+			'cssTagTemplate' => '',
+			'jsTagTemplate' => ''
+		));
+
+		$defaultCssTagTemplate = $this->_model->defineAttributes()['cssTagTemplate']['default'];
+		$defaultJsTagTemplate = $this->_model->defineAttributes()['jsTagTemplate']['default'];
+
+		$this->assertEquals($defaultCssTagTemplate, $this->_model->cssTagTemplate);
+		$this->assertEquals($defaultJsTagTemplate, $this->_model->jsTagTemplate);
+	}
+
+	public function testGetTagTemplatesWhenNotEmpty()
+	{
+		$this->_populateWith(array(
+			'cssTagTemplate' => 'cssTagTemplate',
+			'jsTagTemplate' => 'jsTagTemplate'
+		));
+
+		$this->assertEquals('cssTagTemplate', $this->_model->cssTagTemplate);
+		$this->assertEquals('jsTagTemplate', $this->_model->jsTagTemplate);
+	}
+
 	public function testGetFilesystemPathWithValue()
 	{
 		$this->_populateWith(array(
