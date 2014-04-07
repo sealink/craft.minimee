@@ -261,7 +261,7 @@ class MinimeeServiceTest extends BaseTest
 	public function testIsUrlInvalid($url)
 	{
 		$isUrl = $this->getMethod(minimee()->service, 'isUrl');
-		$this->assertSame(false, $isUrl->invokeArgs(minimee()->service, array($url)));
+		$this->assertFalse($isUrl->invokeArgs(minimee()->service, array($url)));
 	}
 
 	public function dataProviderValidUrls()

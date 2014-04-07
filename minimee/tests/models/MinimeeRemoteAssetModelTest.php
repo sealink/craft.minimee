@@ -81,7 +81,7 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 	{
 		$this->_populateWith(array());
 
-		$this->assertSame(true, $this->_model->exists());
+		$this->assertTrue($this->_model->exists());
 	}
 
 	public function testToStringReturnsFilename()

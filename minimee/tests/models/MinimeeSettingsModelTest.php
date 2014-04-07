@@ -222,10 +222,10 @@ class MinimeeSettingsModelTest extends BaseTest
 		$model->shouldReceive('getBaseUrl')->andReturn(true);
 		$model->shouldReceive('getFilesystemPath')->andReturn(true);
 
-		$this->assertSame(true, $model->cachePath);
-		$this->assertSame(true, $model->cacheUrl);
-		$this->assertSame(true, $model->baseUrl);
-		$this->assertSame(true, $model->filesystemPath);
+		$this->assertTrue($model->cachePath);
+		$this->assertTrue($model->cacheUrl);
+		$this->assertTrue($model->baseUrl);
+		$this->assertTrue($model->filesystemPath);
 	}
 
 	public function testForceTrailingSlashWithSlash()
@@ -301,7 +301,7 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => 'http://domain.com/cache'
 		));
 
-		$this->assertSame(false, $this->_model->useResourceCache());
+		$this->assertFalse($this->_model->useResourceCache());
 	}
 
 	public function testUseResourceCacheWhenOneIsEmpty()
@@ -311,14 +311,14 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => 'http://domain.com/cache'
 		));
 
-		$this->assertSame(false, $this->_model->useResourceCache());
+		$this->assertFalse($this->_model->useResourceCache());
 
 		$this->_populateWith(array(
 			'cachePath' => '/path/to/cache',
 			'cacheUrl' => ''
 		));
 
-		$this->assertSame(false, $this->_model->useResourceCache());
+		$this->assertFalse($this->_model->useResourceCache());
 	}
 
 	public function testUseResourceCacheWhenBothEmpty()
@@ -328,7 +328,7 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => ''
 		));
 
-		$this->assertSame(true, $this->_model->useResourceCache());
+		$this->assertTrue($this->_model->useResourceCache());
 	}
 
 	public function testValidateCachePathAndUrlWhenBothEmpty()
@@ -338,7 +338,7 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => ''
 		));
 
-		$this->assertSame(true, $this->_model->validate());
+		$this->assertTrue($this->_model->validate());
 	}
 
 	public function testValidateCachePathAndUrlWhenBothNonEmpty()
@@ -348,7 +348,7 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => 'http://domain.com/cache'
 		));
 
-		$this->assertSame(true, $this->_model->validate());
+		$this->assertTrue($this->_model->validate());
 	}
 
 	public function testValidateCachePathAndUrlWhenOneIsEmpty()
@@ -359,15 +359,15 @@ class MinimeeSettingsModelTest extends BaseTest
 		));
 
 		$this->_model->validateCachePathAndUrl();
-		$this->assertSame(true, $this->_model->hasErrors());
+		$this->assertTrue($this->_model->hasErrors());
 
 		$this->_populateWith(array(
 			'cachePath' => '/path/to/cache',
 			'cacheUrl' => ''
 		));
 
-		$this->assertSame(false, $this->_model->validate());
-		$this->assertSame(true, $this->_model->hasErrors());
+		$this->assertFalse($this->_model->validate());
+		$this->assertTrue($this->_model->hasErrors());
 
 		$errors = $this->_model->getErrors();
 		$this->assertEquals(2, count($errors));
