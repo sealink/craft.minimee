@@ -500,7 +500,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		craft()->config->maxPowerCaptain();
 
-		switch ($asset->type) :
+		switch ($this->type) :
 			
 			case Minimee_AssetBaseModel::TypeJS:
 
@@ -574,8 +574,7 @@ class MinimeeService extends BaseApplicationComponent
 				$model = array(
 					'filename' => $asset,
 					'filenameUrl' => $asset,
-					'filenamePath' => $asset,
-					'type' => $this->type
+					'filenamePath' => $asset
 				);
 
 				$this->_assets[] = Minimee_RemoteAssetModel::populateModel($model);
@@ -585,8 +584,7 @@ class MinimeeService extends BaseApplicationComponent
 				$model = array(
 					'filename' => $asset,
 					'filenameUrl' => $this->settings->baseUrl . $asset,
-					'filenamePath' => $this->settings->filesystemPath . $asset,
-					'type' => $this->type
+					'filenamePath' => $this->settings->filesystemPath . $asset
 				);
 
 				$this->_assets[] = Minimee_LocalAssetModel::populateModel($model);

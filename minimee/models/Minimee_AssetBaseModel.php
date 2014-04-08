@@ -44,8 +44,7 @@ class Minimee_AssetBaseModel extends BaseModel
 		return array(
 			'filename'      => AttributeType::String,
 			'filenamePath'  => AttributeType::String,
-			'filenameUrl'   => AttributeType::String,
-			'type'          => array(AttributeType::Enum, 'values' => self::TypeCSS . ',' . self::TypeJS)
+			'filenameUrl'   => AttributeType::String
 		);
 	}
 
