@@ -93,20 +93,6 @@ class MinimeePlugin extends BasePlugin
 	}
 
 	/**
-	 * 
-	 * @return void
-	 */
-	public function _bindEvents()
-	{
-		craft()->on('minimee.createCache', function(Event $event) {
-			if(craft()->config->get('devMode'))
-			{
-				minimee()->service->deleteExpiredCache();
-			}
-		});
-	}
-
-	/**
 	 * We define our setting attributes by way of our own Minimee_SettingsModel.
 	 * 
 	 * @return Array
@@ -177,6 +163,22 @@ class MinimeePlugin extends BasePlugin
 		return array(
 			minimee()->service->settings->cachePath => Craft::t('Minimee caches')
 		);
+	}
+
+	/**
+	 * Watch for the "createCache" event, and if in devMode, try to 
+	 * clean up any expired caches
+	 *
+	 * @return void
+	 */
+	protected function _bindEvents()
+	{
+		craft()->on('minimee.createCache', function(Event $event) {
+			if(craft()->config->get('devMode'))
+			{
+				minimee()->service->deleteExpiredCache();
+			}
+		});
 	}
 }
 
