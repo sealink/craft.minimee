@@ -16,6 +16,9 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
+	const TypeCSS = 'css';
+	const TypeJS  = 'js';
+
 	protected $_assets                  = array();  // array of Minimee_AssetModelInterface
 	protected $_type                    = '';       // css or js
 	protected $_cacheHash               = '';       // a hash of all asset filenames together
@@ -37,7 +40,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function css($assets, $settings = array())
 	{
-		return $this->run(Minimee_AssetBaseModel::TypeCSS, $assets, $settings);
+		return $this->run(MinimeeService::TypeCSS, $assets, $settings);
 	}
 
 	/**
@@ -99,7 +102,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function js($assets, $settings = array())
 	{
-		return $this->run(Minimee_AssetBaseModel::TypeJS, $assets, $settings);
+		return $this->run(MinimeeService::TypeJS, $assets, $settings);
 	}
 
 	/**
@@ -119,14 +122,14 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			switch ($type)
 			{
-				case (Minimee_AssetBaseModel::TypeCSS) :
+				case (MinimeeService::TypeCSS) :
 
 					$cssTagTemplate = $this->settings->cssTagTemplate;
 					$tags .= sprintf($cssTagTemplate, $asset);
 
 				break;
 
-				case (Minimee_AssetBaseModel::TypeJS) :
+				case (MinimeeService::TypeJS) :
 
 					$jsTagTemplate = $this->settings->jsTagTemplate;
 					$tags .= sprintf($jsTagTemplate, $asset);
@@ -316,11 +319,11 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		switch($this->type)
 		{
-			case Minimee_AssetBaseModel::TypeCSS :
+			case MinimeeService::TypeCSS :
 				return (bool) $this->settings->combineCssEnabled;
 			break;
 
-			case Minimee_AssetBaseModel::TypeJS :
+			case MinimeeService::TypeJS :
 				return (bool) $this->settings->combineJsEnabled;
 			break;
 		}
@@ -502,7 +505,7 @@ class MinimeeService extends BaseApplicationComponent
 
 		switch ($this->type) :
 			
-			case Minimee_AssetBaseModel::TypeJS:
+			case MinimeeService::TypeJS:
 
 				if($this->settings->minifyJsEnabled)
 				{
@@ -515,7 +518,7 @@ class MinimeeService extends BaseApplicationComponent
 
 			break;
 			
-			case Minimee_AssetBaseModel::TypeCSS:
+			case MinimeeService::TypeCSS:
 
 				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 

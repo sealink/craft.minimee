@@ -86,12 +86,12 @@ class MinimeeTwigExtension extends \Twig_Extension
 	{
 		if(strpos($html, '<link') !== FALSE)
 		{
-			return Minimee_AssetBaseModel::TypeCSS;
+			return MinimeeService::TypeCSS;
 		}
 
 		if(strpos($html, '<script') !== FALSE)
 		{
-			return Minimee_AssetBaseModel::TypeJS;
+			return MinimeeService::TypeJS;
 		}
 
 		return FALSE;
@@ -109,11 +109,11 @@ class MinimeeTwigExtension extends \Twig_Extension
 	{
 		switch (strtolower($type)) :
 
-			case Minimee_AssetBaseModel::TypeCSS :
+			case MinimeeService::TypeCSS :
 				$pat = "/<link{1}.*?href=['|\"']{1}(.*?)['|\"]{1}[^>]*>/i";
 			break;
 
-			case Minimee_AssetBaseModel::TypeJS :
+			case MinimeeService::TypeJS :
 				$pat = "/<script{1}.*?src=['|\"]{1}(.*?)['|\"]{1}[^>]*>(.*?)<\/script>/i";
 			break;
 
