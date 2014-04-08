@@ -73,6 +73,26 @@ class MinimeePlugin extends BasePlugin
 	}
 
 	/**
+	 * Logging any messages to Craft.
+	 * 
+	 * @param String $msg
+	 * @param String $level
+	 * @param Bool $force
+	 * @return Void
+	 */
+	public static function log($msg, $level = LogLevel::Info, $force = false)
+	{
+		if(version_compare('2.0', craft()->getVersion(), '<'))
+		{
+			Craft::log($msg, $level, $force);
+		}
+		else
+		{
+			parent::log($msg, $level, $force);
+		}
+	}
+
+	/**
 	 * 
 	 * @return void
 	 */

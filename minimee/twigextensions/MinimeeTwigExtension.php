@@ -49,7 +49,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		$type = $this->detectType($html);
 		if( ! $type)
 		{
-			Craft::log('Could not determine the type of asset to process.', LogLevel::Warning);
+			MinimeePlugin::log('Could not determine the type of asset to process.', LogLevel::Warning);
 			return minimee()->service->returnHtmlAsTwigMarkup($html);
 		}
 
@@ -57,7 +57,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		$assets = $this->pregMatchAssetsByType($type, $html);
 		if( ! $assets)
 		{
-			Craft::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
+			MinimeePlugin::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
 			return minimee()->service->returnHtmlAsTwigMarkup($html);
 		}
 

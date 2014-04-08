@@ -59,7 +59,7 @@ class MinimeeService extends BaseApplicationComponent
 
 			if (strpos($file, $this->cacheHashPath) === 0)
 			{
-				Craft::log(Craft::t('Minimee is attempting to delete file: ') . $file);
+				MinimeePlugin::log(Craft::t('Minimee is attempting to delete file: ') . $file);
 
 				// suppress errors by passing true as second parameter
 				IOHelper::deleteFile($file, true);
@@ -90,7 +90,7 @@ class MinimeeService extends BaseApplicationComponent
 			}
 		}
 
-		Craft::log(Craft::t('Minimee has been initialised.'));
+		MinimeePlugin::log(Craft::t('Minimee has been initialised.'));
 	}
 
 	/**
@@ -215,7 +215,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function abort($e, $level = LogLevel::Error)
 	{
-		Craft::log(Craft::t('Minimee is aborting with the message: ') . $e, $level);
+		MinimeePlugin::log(Craft::t('Minimee is aborting with the message: ') . $e, $level);
 
 		if(craft()->config->get('devMode')
 			&& $this->settings->enabled
