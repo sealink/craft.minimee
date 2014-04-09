@@ -64,7 +64,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function init()
 	{
-		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
+		$this->_autoload();
 
 		minimee()->stash('plugin', $this);
 		minimee()->stash('service', craft()->minimee);
@@ -179,6 +179,18 @@ class MinimeePlugin extends BasePlugin
 				minimee()->service->deleteExpiredCache();
 			}
 		});
+	}
+
+	/**
+	 * Require any enums used across Minimee
+	 *
+	 * @return Void
+	 */
+	protected function _autoload()
+	{
+		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
+
+		Craft::import('plugins.minimee.enums.MinimeeType');
 	}
 }
 

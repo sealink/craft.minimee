@@ -295,8 +295,11 @@ class MinimeeServiceTest extends BaseTest
 		require_once __DIR__ . '/../../library/vendor/autoload.php';
 
 		// These are usually automatically loaded by Craft
-		require_once __DIR__ . '/../../MinimeePlugin.php';
-		require_once __DIR__ . '/../../services/MinimeeService.php';
+		Craft::import('plugins.minimee.MinimeePlugin');
+		Craft::import('plugins.minimee.services.MinimeeService');
+
+		// This is loaded via MinimeePlugin::init()
+		Craft::import('plugins.minimee.enums.MinimeeType');
 
 		// this usually happens in MinimeePlugin::init()
 		require_once __DIR__ . '/../vendor/autoload.php';

@@ -25,7 +25,7 @@ class MinimeeVariable
 	 */
 	public function css($assets, $settings = array())
 	{
-		return $this->_run(MinimeeService::TypeCSS, $assets, $settings);
+		return $this->_run(MinimeeType::Css, $assets, $settings);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class MinimeeVariable
 	 */
 	public function js($assets, $settings = array())
 	{
-		return $this->_run(MinimeeService::TypeJS, $assets, $settings);
+		return $this->_run(MinimeeType::Js, $assets, $settings);
 	}
 
 	/**

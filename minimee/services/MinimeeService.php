@@ -16,9 +16,6 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
-	const TypeCSS = 'css';
-	const TypeJS  = 'js';
-
 	protected $_assets                  = array();  // array of Minimee_AssetModelInterface
 	protected $_type                    = '';       // css or js
 	protected $_cacheHash               = '';       // a hash of all asset filenames together
@@ -40,7 +37,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function css($assets, $settings = array())
 	{
-		return $this->run(MinimeeService::TypeCSS, $assets, $settings);
+		return $this->run(MinimeeType::Css, $assets, $settings);
 	}
 
 	/**
@@ -102,7 +99,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function js($assets, $settings = array())
 	{
-		return $this->run(MinimeeService::TypeJS, $assets, $settings);
+		return $this->run(MinimeeType::Js, $assets, $settings);
 	}
 
 	/**
@@ -122,14 +119,14 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			switch ($type)
 			{
-				case (MinimeeService::TypeCSS) :
+				case (MinimeeType::Css) :
 
 					$cssTagTemplate = $this->settings->cssTagTemplate;
 					$tags .= sprintf($cssTagTemplate, $asset);
 
 				break;
 
-				case (MinimeeService::TypeJS) :
+				case (MinimeeType::Js) :
 
 					$jsTagTemplate = $this->settings->jsTagTemplate;
 					$tags .= sprintf($jsTagTemplate, $asset);
@@ -319,11 +316,11 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		switch($this->type)
 		{
-			case MinimeeService::TypeCSS :
+			case MinimeeType::Css :
 				return (bool) $this->settings->combineCssEnabled;
 			break;
 
-			case MinimeeService::TypeJS :
+			case MinimeeType::Js :
 				return (bool) $this->settings->combineJsEnabled;
 			break;
 		}
@@ -505,7 +502,7 @@ class MinimeeService extends BaseApplicationComponent
 
 		switch ($this->type) :
 			
-			case MinimeeService::TypeJS:
+			case MinimeeType::Js:
 
 				if($this->settings->minifyJsEnabled)
 				{
@@ -518,7 +515,7 @@ class MinimeeService extends BaseApplicationComponent
 
 			break;
 			
-			case MinimeeService::TypeCSS:
+			case MinimeeType::Css:
 
 				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 
