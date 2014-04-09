@@ -14,16 +14,17 @@
 /**
  * 
  */
-class Minimee_BaseAssetModel extends BaseModel
+class Minimee_BaseAssetModel extends BaseModel implements Minimee_IAssetModel
 {
 	/*
 	 * These are internal attributes only, not defined by Minimee_BaseAssetModel::defineAttributes()
-	 * They are read-only, accessiable via magic getters e.g. $asset->contents
+	 * They are read-only, accessiable via magic getters e.g. $asset->contents or $asset->getContents()
 	 *
 	 * Leave as 'protected' so our parent classes can access them
 	 */
 	protected $_contents;
 	protected $_lastTimeModified;
+	protected $_exists;
 
 	/**
 	 * @return string
@@ -43,6 +44,45 @@ class Minimee_BaseAssetModel extends BaseModel
 			'filenamePath'  => AttributeType::String,
 			'filenameUrl'   => AttributeType::String
 		);
+	}
+
+	/**
+	 * @return String
+	 */
+	public function getContents()
+	{
+		if($this->_contents === null)
+		{
+			$this->_contents = '';
+		}
+
+		return $this->_contents;
+	}
+
+	/**
+	 * @return DateTime
+	 */
+	public function getLastTimeModified()
+	{
+		if($this->_lastTimeModified === null)
+		{
+			$this->_lastTimeModified = DateTime::createFromString('0000000000');
+		}
+
+		return $this->_lastTimeModified;
+	}
+
+	/**
+	 * @return Bool
+	 */
+	public function exists()
+	{
+		if($this->_exists === null)
+		{
+			$this->_exists = false;
+		}
+
+		return $this->_exists;
 	}
 
 	/**

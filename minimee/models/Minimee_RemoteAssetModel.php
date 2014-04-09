@@ -17,7 +17,7 @@ use Guzzle\Http\ClientInterface;
 /**
  * 
  */
-class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel implements Minimee_IAssetModel
+class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 {
 	protected $_client;
 
@@ -38,7 +38,7 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel implements Minimee
 	 */
 	public function getContents()
 	{
-		if( ! $this->_contents)
+		if($this->_contents === null)
 		{
 			$client = $this->_getInstanceOfClient();
 			$request = $client->get($this->filenameUrl);
