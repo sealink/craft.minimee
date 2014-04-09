@@ -88,30 +88,32 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals(null, $isCombineEnabled->invoke(minimee()->service));
 	}
 
-	public function testSetCacheTimestampAlwaysSetsMax()
+	public function testSetMaxCacheTimestampAlwaysSetsMax()
 	{
+		$setMaxCacheTimestamp = $this->getMethod(minimee()->service, 'setMaxCacheTimestamp');
+
 		$dt = new DateTime('now');
 		$nowTimestamp = $dt->getTimestamp();
 
-		minimee()->service->cacheTimestamp = $dt;
+		$setMaxCacheTimestamp->invokeArgs(minimee()->service, array($dt));
 		$this->assertEquals($nowTimestamp, minimee()->service->cacheTimestamp);
 
 		// reduce by a day
 		$dt->modify("-1 day");
 		$yesterdayTimestamp = $dt->getTimestamp();
 
-		minimee()->service->cacheTimestamp = $dt;
+		$setMaxCacheTimestamp->invokeArgs(minimee()->service, array($dt));
 		$this->assertEquals($nowTimestamp, minimee()->service->cacheTimestamp);
 
 		// increase by 2 days
 		$dt->modify("+2 day");
 		$tomorrowTimestamp = $dt->getTimestamp();
 
-		minimee()->service->cacheTimestamp = $dt;
+		$setMaxCacheTimestamp->invokeArgs(minimee()->service, array($dt));
 		$this->assertEquals($tomorrowTimestamp, minimee()->service->cacheTimestamp);
 
 		// test that setting it to the same value has no ill effect
-		minimee()->service->cacheTimestamp = $dt;
+		$setMaxCacheTimestamp->invokeArgs(minimee()->service, array($dt));
 		$this->assertEquals($tomorrowTimestamp, minimee()->service->cacheTimestamp);
 	}
 

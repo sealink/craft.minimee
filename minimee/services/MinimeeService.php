@@ -248,7 +248,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		foreach ($this->assets as $asset)
 		{
-			$this->cacheTimestamp   = $asset->lastTimeModified;
+			$this->setMaxCacheTimestamp($asset->lastTimeModified);
 			$this->cacheHash        = $asset->filename;
 		}
 
@@ -607,13 +607,22 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * @param String $dateTime
+	 * @return Void
+	 */
+	protected function setCacheTimestamp($timestamp)
+	{
+		$this->_cacheTimestamp = $timestamp ?: 0;
+	}
+
+	/**
 	 * @param DateTime $lastTimeModified
 	 * @return Void
 	 */
-	protected function setCacheTimestamp(DateTime $lastTimeModified)
+	protected function setMaxCacheTimestamp(DateTime $lastTimeModified)
 	{
 		$timestamp = $lastTimeModified->getTimestamp();
-		$this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+		$this->cacheTimestamp = max($this->cacheTimestamp, $timestamp);
 	}
 
 	/**
