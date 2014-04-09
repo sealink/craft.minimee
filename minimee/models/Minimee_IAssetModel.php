@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-interface Minimee_AssetModelInterface
+interface Minimee_IAssetModel
 {
 	public function __toString();
 
