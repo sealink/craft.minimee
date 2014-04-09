@@ -493,7 +493,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * Given an asset, fetches and returns minified contents.
 	 *
-	 * @param Minimee_AssetBaseModel $asset
+	 * @param Minimee_BaseAssetModel $asset
 	 * @return String
 	 */
 	protected function minifyAsset($asset)

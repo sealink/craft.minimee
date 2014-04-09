@@ -14,7 +14,7 @@
 /**
  * 
  */
-class Minimee_LocalAssetModel extends Minimee_AssetBaseModel implements Minimee_IAssetModel
+class Minimee_LocalAssetModel extends Minimee_BaseAssetModel implements Minimee_IAssetModel
 {
 	/**
 	 * Set our location based on contents of filename

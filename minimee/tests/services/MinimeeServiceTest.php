@@ -307,7 +307,7 @@ class MinimeeServiceTest extends BaseTest
 		require_once __DIR__ . '/../vendor/autoload.php';
 
 		// And these Craft can usually autoload
-		// require_once __DIR__ . '/../../models/Minimee_AssetBaseModel.php';
+		// require_once __DIR__ . '/../../models/Minimee_BaseAssetModel.php';
 		// require_once __DIR__ . '/../../models/Minimee_LocalAssetModel.php';
 		// require_once __DIR__ . '/../../models/Minimee_RemoveAssetModel.php';
 		// require_once __DIR__ . '/../../models/Minimee_SettingsModel.php';

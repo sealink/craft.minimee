@@ -17,7 +17,7 @@ use Guzzle\Http\ClientInterface;
 /**
  * 
  */
-class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel implements Minimee_IAssetModel
+class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel implements Minimee_IAssetModel
 {
 	protected $_client;
 

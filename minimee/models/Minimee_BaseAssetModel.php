@@ -14,10 +14,10 @@
 /**
  * 
  */
-class Minimee_AssetBaseModel extends BaseModel
+class Minimee_BaseAssetModel extends BaseModel
 {
 	/*
-	 * These are internal attributes only, not defined by Minimee_AssetBaseModel::defineAttributes()
+	 * These are internal attributes only, not defined by Minimee_BaseAssetModel::defineAttributes()
 	 * They are read-only, accessiable via magic getters e.g. $asset->contents
 	 *
 	 * Leave as 'protected' so our parent classes can access them
