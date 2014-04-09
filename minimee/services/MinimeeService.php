@@ -45,7 +45,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function deleteExpiredCache()
 	{
-		Craft::t('Minimee is attempting to delete expired caches.');
+		MinimeePlugin::log(Craft::t('Minimee is attempting to delete expired caches.'));
 
 		$files = IOHelper::getFiles($this->settings->cachePath);
 
