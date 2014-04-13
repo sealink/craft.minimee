@@ -666,8 +666,12 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function setType($type)
 	{
+		if($type !== MinimeeType::Css && $type !== MinimeeType::Js)
+		{
+			throw new Exception(Craft::t('Attempting to set an unknown type `' . $type . '`.'));
+		}
 
-		$this->_type = strtolower($type);
+		$this->_type = $type;
 
 		return $this;
 	}
