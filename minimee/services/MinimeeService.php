@@ -341,6 +341,19 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Determine if string is valid URL
+	 *
+	 * @param   string  String to test
+	 * @return  bool    TRUE if yes, FALSE if no
+	 */
+	protected function isUrl($string)
+	{
+		// from old _isURL() file from Carabiner Asset Management Library
+		// modified to support leading with double slashes
+		return (preg_match('@((https?:)?//([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string) > 0);
+	}
+
+	/**
 	 * Perform pre-flight checks to ensure we can run.
 	 *
 	 * @return this
@@ -417,64 +430,9 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
-	protected function getCacheFilename()
-	{
-		if($this->settings->useResourceCache())
-		{
-			return sprintf('%s.%s', $this->getHashOfCacheBase(), $this->type);
-		}
-
-		return sprintf('%s.%s.%s', $this->getHashOfCacheBase(), $this->cacheTimestamp, $this->type);
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function makePathToCacheFilename()
-	{
-		return $this->settings->cachePath . $this->cacheFilename;
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function makePathToHashOfCacheBase()
-	{
-		return $this->settings->cachePath . $this->getHashOfCacheBase();
-	}
-
-	/**
-	 * @return String
-	 */
 	protected function getCacheTimestamp()
 	{
 		return ($this->_cacheTimestamp) ? $this->_cacheTimestamp : self::TimestampZero;
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function makeUrlToCacheFilename()
-	{
-		if($this->settings->useResourceCache())
-		{
-			$path = '/minimee/' . $this->cacheFilename;
-
-			$dateParam = craft()->resources->dateParam;
-			$params[$dateParam] = IOHelper::getLastTimeModified($this->makePathToCacheFilename())->getTimestamp();
-
-			return UrlHelper::getUrl(craft()->config->getResourceTrigger() . $path, $params);
-		}
-		
-		return $this->settings->cacheUrl . $this->cacheFilename;
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function getHashOfCacheBase()
-	{
-		return sha1($this->_cacheBase);
 	}
 
 	/**
@@ -500,16 +458,58 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Determine if string is valid URL
-	 *
-	 * @param   string  String to test
-	 * @return  bool    TRUE if yes, FALSE if no
+	 * @return String
 	 */
-	protected function isUrl($string)
+	protected function makeCacheFilename()
 	{
-		// from old _isURL() file from Carabiner Asset Management Library
-		// modified to support leading with double slashes
-		return (preg_match('@((https?:)?//([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string) > 0);
+		if($this->settings->useResourceCache())
+		{
+			return sprintf('%s.%s', $this->makeHashOfCacheBase(), $this->type);
+		}
+
+		return sprintf('%s.%s.%s', $this->makeHashOfCacheBase(), $this->cacheTimestamp, $this->type);
+	}
+
+	/**
+	 * @return String
+	 */
+	protected function makeHashOfCacheBase()
+	{
+		return sha1($this->_cacheBase);
+	}
+
+	/**
+	 * @return String
+	 */
+	protected function makePathToCacheFilename()
+	{
+		return $this->settings->cachePath . $this->makeCacheFilename();
+	}
+
+	/**
+	 * @return String
+	 */
+	protected function makePathToHashOfCacheBase()
+	{
+		return $this->settings->cachePath . $this->makeHashOfCacheBase();
+	}
+
+	/**
+	 * @return String
+	 */
+	protected function makeUrlToCacheFilename()
+	{
+		if($this->settings->useResourceCache())
+		{
+			$path = '/minimee/' . $this->makeCacheFilename();
+
+			$dateParam = craft()->resources->dateParam;
+			$params[$dateParam] = IOHelper::getLastTimeModified($this->makePathToCacheFilename())->getTimestamp();
+
+			return UrlHelper::getUrl(craft()->config->getResourceTrigger() . $path, $params);
+		}
+		
+		return $this->settings->cacheUrl . $this->makeCacheFilename();
 	}
 
 	/**
@@ -623,6 +623,8 @@ class MinimeeService extends BaseApplicationComponent
 	protected function setCacheBase($name)
 	{
 		$this->_cacheBase = $name;
+
+		return $this;
 	}
 
 	/**
@@ -632,6 +634,8 @@ class MinimeeService extends BaseApplicationComponent
 	protected function setCacheTimestamp($timestamp)
 	{
 		$this->_cacheTimestamp = $timestamp ?: self::TimestampZero;
+
+		return $this;
 	}
 
 	/**
@@ -642,6 +646,8 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$timestamp = $lastTimeModified->getTimestamp();
 		$this->cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+
+		return $this;
 	}
 
 	/**
@@ -669,7 +675,7 @@ class MinimeeService extends BaseApplicationComponent
 	protected function setType($type)
 	{
 
-		$this->type = strtolower($type);
+		$this->_type = strtolower($type);
 
 		return $this;
 	}
