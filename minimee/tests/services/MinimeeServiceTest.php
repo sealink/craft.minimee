@@ -27,6 +27,17 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
+	public function makeCacheFilename()
+	{
+		minimee()->service->cacheBase = 'base';
+		minimee()->service->cacheTimestamp = '12345678';
+		minimee()->service->type = MinimeeType::Css;
+
+		$makeCacheFilename = $this->getMethod(minimee()->service, 'makeCacheFilename');
+		$this->assertEquals('base.12345678.css', $makeCacheFilename->invoke(minimee()->service));
+
+	}
+
 	public function testMakeHashOfCacheBase()
 	{
 		minimee()->service->cacheBase = 'asdf1234';
