@@ -27,12 +27,24 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
-	public function testSetTypeCastsString()
+	public function testSetTypeAllEnums()
 	{
 		$setType = $this->getMethod(minimee()->service, 'setType');
-		$setType->invokeArgs(minimee()->service, array('CSS'));
-		$this->assertSame('css', minimee()->service->type);
+		$setType->invokeArgs(minimee()->service, array(MinimeeType::Css));
+		$this->assertSame(MinimeeType::Css, minimee()->service->type);
+
+		$setType->invokeArgs(minimee()->service, array(MinimeeType::Js));
+		$this->assertSame(MinimeeType::Js, minimee()->service->type);
 	}
+
+	/**
+     * @expectedException Exception
+     */
+    public function testSetTypeInvalid()
+    {
+		$setType = $this->getMethod(minimee()->service, 'setType');
+		$setType->invokeArgs(minimee()->service, array('CSS'));
+    }
 
 	public function testIsCombineEnabledWhenTrue()
 	{
