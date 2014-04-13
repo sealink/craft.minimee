@@ -16,13 +16,14 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
-	protected $_assets                  = array();  // array of Minimee_AssetModelInterface
-	protected $_type                    = '';       // css or js
-	protected $_cacheHash               = '';       // a hash of all asset filenames together
-	protected $_settings                = null;     // instance of Minimee_SettingsModel
 	const TimestampZero = '00000000';
 
+	protected $_assets          = array();              // array of Minimee_AssetModelInterface
+	protected $_type            = '';                   // css or js
+	protected $_cacheBase       = '';                   // a concat of all asset filenames together
 	protected $_cacheTimestamp  = self::TimestampZero;  // max timestamp of all assets
+	protected $_settings        = null;                 // instance of Minimee_SettingsModel
+
 	protected static $_pluginSettings	= array();		// static array of settings, a merge of DB and filesystem settings
 
 
