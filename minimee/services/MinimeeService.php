@@ -261,7 +261,7 @@ class MinimeeService extends BaseApplicationComponent
 		foreach ($this->assets as $asset)
 		{
 			$this->setMaxCacheTimestamp($asset->lastTimeModified);
-			$this->appendToCacheHash($asset->filename);
+			$this->appendToCacheBase($asset->filename);
 		}
 
 		if( ! IOHelper::fileExists($this->cacheFilenamePath))
