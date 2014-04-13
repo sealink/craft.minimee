@@ -38,6 +38,22 @@ class MinimeeServiceTest extends BaseTest
 
 	}
 
+	public function testMakePathToCacheFilename()
+	{
+		$settings = array(
+			'cachePath' => '/usr/var/www/html/cache/'
+		);
+		minimee()->service->settings = $settings;
+		minimee()->service->cacheBase = 'base';
+		minimee()->service->cacheTimestamp = '12345678';
+		minimee()->service->type = MinimeeType::Css;
+
+		$hashOfCacheBase = sha1('base');
+
+		$makePathToCacheFilename = $this->getMethod(minimee()->service, 'makePathToCacheFilename');
+		$this->assertEquals('/usr/var/www/html/cache/' . $hashOfCacheBase . '.12345678.css', $makePathToCacheFilename->invoke(minimee()->service));
+	}
+
 	public function testMakeHashOfCacheBase()
 	{
 		minimee()->service->cacheBase = 'asdf1234';
