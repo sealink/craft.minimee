@@ -57,10 +57,10 @@ class MinimeeVariable
 		if( ! $minified)
 		{
 			$html = minimee()->service->makeTagsByType($type, $assets);
-			return minimee()->service->returnHtmlAsTwigMarkup($html);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
 		$html = minimee()->service->makeTagsByType($type, $minified);
-		return minimee()->service->returnHtmlAsTwigMarkup($html);
+		return minimee()->service->makeTwigMarkupFromHtml($html);
 	}
 }

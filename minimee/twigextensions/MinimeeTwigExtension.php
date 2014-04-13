@@ -50,7 +50,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		if( ! $type)
 		{
 			MinimeePlugin::log('Could not determine the type of asset to process.', LogLevel::Warning);
-			return minimee()->service->returnHtmlAsTwigMarkup($html);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
 		// we need to find some assets in the HTML
@@ -58,7 +58,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		if( ! $assets)
 		{
 			MinimeePlugin::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
-			return minimee()->service->returnHtmlAsTwigMarkup($html);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
 		// hand off the rest to our service
@@ -67,13 +67,13 @@ class MinimeeTwigExtension extends \Twig_Extension
 		// false means we failed, so return original markup
 		if( ! $minified)
 		{
-			return minimee()->service->returnHtmlAsTwigMarkup($html);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
 		$minifiedAsTags = minimee()->service->makeTagsByType($type, $minified);
 
 		// return minified tag(s) as Twig Markup
-		return minimee()->service->returnHtmlAsTwigMarkup($minifiedAsTags);
+		return minimee()->service->makeTwigMarkupFromHtml($minifiedAsTags);
 	}
 
 	/**

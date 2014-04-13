@@ -54,9 +54,9 @@ class MinimeeService extends BaseApplicationComponent
 		foreach($files as $file)
 		{
 			// skip self
-			if ($file === $this->cacheFilenamePath) continue;
+			if ($file === $this->makePathToCacheFilename()) continue;
 
-			if (strpos($file, $this->hashOfCacheBasePath) === 0)
+			if (strpos($file, $this->makePathToHashOfCacheBase()) === 0)
 			{
 				MinimeePlugin::log(Craft::t('Minimee is attempting to delete file: ') . $file);
 
@@ -146,7 +146,7 @@ class MinimeeService extends BaseApplicationComponent
 	 * @param string
 	 * @return Twig_Markup
 	 */
-	public function returnHtmlAsTwigMarkup($html)
+	public function makeTwigMarkupFromHtml($html)
 	{
 		// Prevent having to use the |raw filter when calling variable in template
 		// http://pastie.org/6412894#1
@@ -264,14 +264,14 @@ class MinimeeService extends BaseApplicationComponent
 			$this->appendToCacheBase($asset->filename);
 		}
 
-		if( ! IOHelper::fileExists($this->cacheFilenamePath))
+		if( ! IOHelper::fileExists($this->makePathToCacheFilename()))
 		{
 			return false;
 		}
 
 		if($this->settings->useResourceCache())
 		{
-			$cacheLastTimeModified = IOHelper::getLastTimeModified($this->cacheFilenamePath);
+			$cacheLastTimeModified = IOHelper::getLastTimeModified($this->makePathToCacheFilename());
 
 			if($cacheLastTimeModified->getTimestamp() < $this->cacheTimestamp)
 			{
@@ -314,7 +314,7 @@ class MinimeeService extends BaseApplicationComponent
 			$contents .= $this->minifyAsset($asset) . "\n";
 		}
 
-		IOHelper::writeToFile($this->cacheFilenamePath, $contents);
+		IOHelper::writeToFile($this->makePathToCacheFilename(), $contents);
 
 		$this->onCreateCache(new Event($this));
 	}
@@ -428,7 +428,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
-	protected function getCacheFilenamePath()
+	protected function makePathToCacheFilename()
 	{
 		return $this->settings->cachePath . $this->cacheFilename;
 	}
@@ -436,7 +436,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
-	protected function getHashOfCacheBasePath()
+	protected function makePathToHashOfCacheBase()
 	{
 		return $this->settings->cachePath . $this->getHashOfCacheBase();
 	}
@@ -459,7 +459,7 @@ class MinimeeService extends BaseApplicationComponent
 			$path = '/minimee/' . $this->cacheFilename;
 
 			$dateParam = craft()->resources->dateParam;
-			$params[$dateParam] = IOHelper::getLastTimeModified($this->cacheFilenamePath)->getTimestamp();
+			$params[$dateParam] = IOHelper::getLastTimeModified($this->makePathToCacheFilename())->getTimestamp();
 
 			return UrlHelper::getUrl(craft()->config->getResourceTrigger() . $path, $params);
 		}
