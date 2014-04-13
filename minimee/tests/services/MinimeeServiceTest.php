@@ -125,7 +125,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testGetCacheHashIsEncrypted()
 	{
-		$getCacheHash = $this->getMethod(minimee()->service, 'getCacheHash');
+		$getCacheHash = $this->getMethod(minimee()->service, 'getCacheBase');
 		$this->assertEquals(sha1(''), $getCacheHash->invoke(minimee()->service));
 	}
 
@@ -252,7 +252,7 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals(array(), minimee()->service->assets);
 		$this->assertInstanceOf('\Craft\Minimee_SettingsModel', minimee()->service->settings);
 		$this->assertEquals('', minimee()->service->type);
-		$this->assertEquals(sha1(''), minimee()->service->cacheHash);
+		$this->assertEquals('', minimee()->service->cacheBase);
 		$this->assertEquals(MinimeeService::TimestampZero, minimee()->service->cacheTimestamp);
 	}
 

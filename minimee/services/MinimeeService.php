@@ -43,7 +43,7 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Based on the cache's hash, attemtps to delete any older versions of same hash name.
+	 * Based on the cache's hashed base, attempts to delete any older versions of same name.
 	 */
 	public function deleteExpiredCache()
 	{
@@ -56,7 +56,7 @@ class MinimeeService extends BaseApplicationComponent
 			// skip self
 			if ($file === $this->cacheFilenamePath) continue;
 
-			if (strpos($file, $this->cacheHashPath) === 0)
+			if (strpos($file, $this->hashOfCacheBasePath) === 0)
 			{
 				MinimeePlugin::log(Craft::t('Minimee is attempting to delete file: ') . $file);
 
@@ -227,6 +227,16 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Append an asset's name to the cacheBase
+	 * @param String $name
+	 * @return Void
+	 */
+	protected function appendToCacheBase($name)
+	{
+		$this->_cacheBase .= $name;
+	}
+
+	/**
 	 * Fetch or creates cache.
 	 *
 	 * @return String
@@ -251,7 +261,7 @@ class MinimeeService extends BaseApplicationComponent
 		foreach ($this->assets as $asset)
 		{
 			$this->setMaxCacheTimestamp($asset->lastTimeModified);
-			$this->cacheHash        = $asset->filename;
+			$this->appendToCacheHash($asset->filename);
 		}
 
 		if( ! IOHelper::fileExists($this->cacheFilenamePath))
@@ -395,16 +405,24 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * @return Array
+	 */
+	protected function getCacheBase()
+	{
+		return $this->_cacheBase;
+	}
+
+	/**
 	 * @return String
 	 */
 	protected function getCacheFilename()
 	{
 		if($this->settings->useResourceCache())
 		{
-			return sprintf('%s.%s', $this->cacheHash, $this->type);
+			return sprintf('%s.%s', $this->getHashOfCacheBase(), $this->type);
 		}
 
-		return sprintf('%s.%s.%s', $this->cacheHash, $this->cacheTimestamp, $this->type);
+		return sprintf('%s.%s.%s', $this->getHashOfCacheBase(), $this->cacheTimestamp, $this->type);
 	}
 
 	/**
@@ -418,17 +436,9 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
-	protected function getCacheHash()
+	protected function getHashOfCacheBasePath()
 	{
-		return sha1($this->_cacheHash);
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function getCacheHashPath()
-	{
-		return $this->settings->cachePath . $this->cacheHash;
+		return $this->settings->cachePath . $this->getHashOfCacheBase();
 	}
 
 	/**
@@ -455,6 +465,14 @@ class MinimeeService extends BaseApplicationComponent
 		}
 		
 		return $this->settings->cacheUrl . $this->cacheFilename;
+	}
+
+	/**
+	 * @return String
+	 */
+	protected function getHashOfCacheBase()
+	{
+		return sha1($this->_cacheBase);
 	}
 
 	/**
@@ -555,7 +573,7 @@ class MinimeeService extends BaseApplicationComponent
 		$this->_assets                  = array();
 		$this->_settings                = null;
 		$this->_type                    = '';
-		$this->_cacheHash               = '';
+		$this->_cacheBase               = '';
 		$this->_cacheTimestamp          = self::TimestampZero;
 
 		return $this;
@@ -600,12 +618,9 @@ class MinimeeService extends BaseApplicationComponent
 	 * @param String $name
 	 * @return Void
 	 */
-	protected function setCacheHash($name)
+	protected function setCacheBase($name)
 	{
-		// remove any cache-busting strings so the cache name doesn't change with every edit.
-		// format: .v.1330213450
-		// this is held over from EE. Still a good idea to do something like this, perhaps improve in future.
-		$this->_cacheHash .= preg_replace('/\.v\.(\d+)/i', '', $name);
+		$this->_cacheBase = $name;
 	}
 
 	/**
