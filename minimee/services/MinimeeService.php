@@ -31,18 +31,6 @@ class MinimeeService extends BaseApplicationComponent
 
 
 	/**
-	 * Shorthand function to process CSS
-	 *
-	 * @param Array $assets
-	 * @param Array $settings
-	 * @return String|Bool
-	 */
-	public function css($assets, $settings = array())
-	{
-		return $this->run(MinimeeType::Css, $assets, $settings);
-	}
-
-	/**
 	 * Based on the cache's hashed base, attempts to delete any older versions of same name.
 	 */
 	public function deleteExpiredCache()
@@ -90,18 +78,6 @@ class MinimeeService extends BaseApplicationComponent
 		}
 
 		MinimeePlugin::log(Craft::t('Minimee has been initialised.'));
-	}
-
-	/**
-	 * Shorthand function to process JS
-	 *
-	 * @param Array $assets
-	 * @param Array $settings
-	 * @return String|Bool
-	 */
-	public function js($assets, $settings = array())
-	{
-		return $this->run(MinimeeType::Js, $assets, $settings);
 	}
 
 	/**
