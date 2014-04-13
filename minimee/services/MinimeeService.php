@@ -19,9 +19,10 @@ class MinimeeService extends BaseApplicationComponent
 	protected $_assets                  = array();  // array of Minimee_AssetModelInterface
 	protected $_type                    = '';       // css or js
 	protected $_cacheHash               = '';       // a hash of all asset filenames together
-	protected $_cacheTimestamp          = 0;       // timestamp of cache
 	protected $_settings                = null;     // instance of Minimee_SettingsModel
+	const TimestampZero = '00000000';
 
+	protected $_cacheTimestamp  = self::TimestampZero;  // max timestamp of all assets
 	protected static $_pluginSettings	= array();		// static array of settings, a merge of DB and filesystem settings
 
 
@@ -434,7 +435,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getCacheTimestamp()
 	{
-		return ($this->_cacheTimestamp == 0) ? '0000000000' : $this->_cacheTimestamp;
+		return ($this->_cacheTimestamp) ? $this->_cacheTimestamp : self::TimestampZero;
 	}
 
 	/**
@@ -554,7 +555,7 @@ class MinimeeService extends BaseApplicationComponent
 		$this->_settings                = null;
 		$this->_type                    = '';
 		$this->_cacheHash               = '';
-		$this->_cacheTimestamp          = '';
+		$this->_cacheTimestamp          = self::TimestampZero;
 
 		return $this;
 	}
@@ -612,7 +613,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function setCacheTimestamp($timestamp)
 	{
-		$this->_cacheTimestamp = $timestamp ?: 0;
+		$this->_cacheTimestamp = $timestamp ?: self::TimestampZero;
 	}
 
 	/**

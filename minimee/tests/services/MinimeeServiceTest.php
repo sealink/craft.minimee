@@ -120,7 +120,7 @@ class MinimeeServiceTest extends BaseTest
 	public function testGetCacheTimestampWhenZeroReturnsPaddedZeros()
 	{
 		$getCacheTimestamp = $this->getMethod(minimee()->service, 'getCacheTimestamp');
-		$this->assertEquals('00000000', $getCacheTimestamp->invoke(minimee()->service));
+		$this->assertEquals(MinimeeService::TimestampZero, $getCacheTimestamp->invoke(minimee()->service));
 	}
 
 	public function testGetCacheHashIsEncrypted()
@@ -253,7 +253,7 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertInstanceOf('\Craft\Minimee_SettingsModel', minimee()->service->settings);
 		$this->assertEquals('', minimee()->service->type);
 		$this->assertEquals(sha1(''), minimee()->service->cacheHash);
-		$this->assertEquals('00000000', minimee()->service->cacheTimestamp);
+		$this->assertEquals(MinimeeService::TimestampZero, minimee()->service->cacheTimestamp);
 	}
 
 	public function dataProviderInvalidUrls()
