@@ -223,7 +223,10 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if( ! $this->cacheExists())
 		{
-			$this->createCache();
+			if( ! $this->createCache())
+			{
+				throw new Exception(Craft::t('Minimee could not find asset ' . $asset->filenamePath . '.'));
+			}
 		}
 
 		return $this;
@@ -292,9 +295,14 @@ class MinimeeService extends BaseApplicationComponent
 			$contents .= $this->minifyAsset($asset) . "\n";
 		}
 
-		IOHelper::writeToFile($this->makePathToCacheFilename(), $contents);
+		if( ! IOHelper::writeToFile($this->makePathToCacheFilename(), $contents))
+		{
+			return false;
+		}
 
 		$this->onCreateCache(new Event($this));
+
+		return true;
 	}
 
 	/**
