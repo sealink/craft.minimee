@@ -179,7 +179,8 @@ class MinimeeService extends BaseApplicationComponent
 			$return = array();
 			if($this->isCombineEnabled())
 			{
-				$return[] = $this->cache();
+				$return[] = $this->ensureCacheExists()
+								 ->makeUrlToCacheFilename();
 			}
 			else
 			{
@@ -189,7 +190,8 @@ class MinimeeService extends BaseApplicationComponent
 									 ->setSettings($settings)
 									 ->setType($type)
 									 ->setAssets($asset)
-									 ->cache();
+									 ->ensureCacheExists()
+									 ->makeUrlToCacheFilename();
 				}
 			}
 		}
@@ -241,14 +243,14 @@ class MinimeeService extends BaseApplicationComponent
 	 *
 	 * @return String
 	 */
-	protected function cache()
+	protected function ensureCacheExists()
 	{
 		if( ! $this->cacheExists())
 		{
 			$this->createCache();
 		}
 
-		return $this->getCacheUrl();
+		return $this;
 	}
 
 	/**
@@ -452,7 +454,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
-	protected function getCacheUrl()
+	protected function makeUrlToCacheFilename()
 	{
 		if($this->settings->useResourceCache())
 		{
