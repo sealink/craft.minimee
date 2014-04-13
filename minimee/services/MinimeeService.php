@@ -16,7 +16,7 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
-	const TimestampZero = '00000000';
+	const TimestampZero         = '00000000';           // exact string representation of "zero" timestamp
 
 	protected $_assets          = array();              // array of Minimee_AssetModelInterface
 	protected $_type            = '';                   // css or js
