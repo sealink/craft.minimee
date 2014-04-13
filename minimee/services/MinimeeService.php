@@ -442,6 +442,14 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Returns a complete cache filename.
+	 * If a "Resource" cache, format is:
+	 *		hashOfCacheBase.type
+	 *		e.g. asdf1234.css
+	 * Otherwise, format is:
+	 *		hashOfCacheBase.timestamp.type
+	 *		e.g. asdf1234.12345678.css
+	 *
 	 * @return String
 	 */
 	protected function makeCacheFilename()
@@ -557,10 +565,10 @@ class MinimeeService extends BaseApplicationComponent
 	protected function reset()
 	{
 		$this->_assets                  = array();
-		$this->_settings                = null;
-		$this->_type                    = '';
 		$this->_cacheBase               = '';
 		$this->_cacheTimestamp          = self::TimestampZero;
+		$this->_settings                = null;
+		$this->_type                    = '';
 
 		return $this;
 	}
