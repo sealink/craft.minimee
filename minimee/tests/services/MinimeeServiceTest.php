@@ -123,12 +123,6 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals(MinimeeService::TimestampZero, $getCacheTimestamp->invoke(minimee()->service));
 	}
 
-	public function testGetCacheHashIsEncrypted()
-	{
-		$getCacheHash = $this->getMethod(minimee()->service, 'getCacheBase');
-		$this->assertEquals(sha1(''), $getCacheHash->invoke(minimee()->service));
-	}
-
 	public function testMakeTagsByTypePassingCssStringUsingDefaultTemplate()
 	{
 		$css = 'http://domain.dev/cache/hash.timestamp.css';
