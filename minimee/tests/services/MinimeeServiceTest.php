@@ -27,6 +27,86 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
+	public function testSetAssetsWhenLocalCss()
+	{
+		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
+		$setAssets->invokeArgs(minimee()->service, array(
+			'/assets/css/style.css'
+		));
+
+		$getAssets = minimee()->service->assets;
+
+		$this->assertInstanceOf('\Craft\Minimee_LocalAssetModel', $getAssets[0]);
+	}
+
+	public function testSetAssetsWhenLocalJs()
+	{
+		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
+		$setAssets->invokeArgs(minimee()->service, array(
+			'/assets/js/app.js'
+		));
+
+		$getAssets = minimee()->service->assets;
+
+		$this->assertInstanceOf('\Craft\Minimee_LocalAssetModel', $getAssets[0]);
+	}
+
+	public function testSetAssetsWhenRemoteCss()
+	{
+		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
+		$setAssets->invokeArgs(minimee()->service, array(
+			'http://domain.dev/assets/css/style.css'
+		));
+
+		$getAssets = minimee()->service->assets;
+
+		$this->assertInstanceOf('\Craft\Minimee_RemoteAssetModel', $getAssets[0]);
+	}
+
+	public function testSetAssetsWhenRemoteJs()
+	{
+		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
+		$setAssets->invokeArgs(minimee()->service, array(
+			'http://domain.dev/assets/js/app.js'
+		));
+
+		$getAssets = minimee()->service->assets;
+
+		$this->assertInstanceOf('\Craft\Minimee_RemoteAssetModel', $getAssets[0]);
+	}
+
+	public function testSetAssetsWhenMixedLocalAndRemoteCss()
+	{
+		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
+		$setAssets->invokeArgs(minimee()->service, array(
+			array(
+				'/assets/js/jquery.js',
+				'http://domain.dev/assets/js/app.js'
+			)
+		));
+
+		$getAssets = minimee()->service->assets;
+
+		$this->assertInstanceOf('\Craft\Minimee_LocalAssetModel', $getAssets[0]);
+		$this->assertInstanceOf('\Craft\Minimee_RemoteAssetModel', $getAssets[1]);
+	}
+
+	public function testSetAssetsWhenMixedLocalAndRemoteJs()
+	{
+		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
+		$setAssets->invokeArgs(minimee()->service, array(
+			array(
+				'/assets/css/normalize.css',
+				'http://domain.dev/assets/css/style.css'
+			)
+		));
+
+		$getAssets = minimee()->service->assets;
+
+		$this->assertInstanceOf('\Craft\Minimee_LocalAssetModel', $getAssets[0]);
+		$this->assertInstanceOf('\Craft\Minimee_RemoteAssetModel', $getAssets[1]);
+	}
+
 	public function testSetTypeAllEnums()
 	{
 		$setType = $this->getMethod(minimee()->service, 'setType');
