@@ -216,14 +216,21 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testReset()
 	{
+		minimee()->service->assets = array('/asset/css/style.css');
+		minimee()->service->type = MinimeeType::Css;
+		minimee()->service->settings = array(
+			'enabled' => true);
+		minimee()->service->cacheBase = 'asset.css.style.css';
+		minimee()->service->cacheTimestamp = new DateTime('now');
+
 		$reset = $this->getMethod(minimee()->service, 'reset');
 		$reset->invoke(minimee()->service);
 
-		$this->assertEquals(array(), minimee()->service->assets);
+		$this->assertSame(array(), minimee()->service->assets);
 		$this->assertInstanceOf('\Craft\Minimee_SettingsModel', minimee()->service->settings);
-		$this->assertEquals('', minimee()->service->type);
-		$this->assertEquals('', minimee()->service->cacheBase);
-		$this->assertEquals(MinimeeService::TimestampZero, minimee()->service->cacheTimestamp);
+		$this->assertSame('', minimee()->service->type);
+		$this->assertSame('', minimee()->service->cacheBase);
+		$this->assertSame(MinimeeService::TimestampZero, minimee()->service->cacheTimestamp);
 	}
 
 	public function dataProviderInvalidUrls()
