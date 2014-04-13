@@ -131,7 +131,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakeTagsByTypePassingCssStringUsingDefaultTemplate()
 	{
-		$css = 'http://domain.dev/cache/filename.hash.css';
+		$css = 'http://domain.dev/cache/hash.timestamp.css';
 		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
 
 		$rendered = sprintf($cssTagTemplate, $css);
@@ -141,8 +141,8 @@ class MinimeeServiceTest extends BaseTest
 	public function testMakeTagsByTypePassingCssArrayUsingDefaultTemplate()
 	{
 		$cssArray = array(
-			'http://domain.dev/cache/filename.hash1.css',
-			'http://domain.dev/cache/filename.hash2.css'
+			'http://domain.dev/cache/hash1.timestamp.css',
+			'http://domain.dev/cache/hash2.timestamp.css'
 		);
 		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
 
@@ -157,7 +157,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakeTagsByTypePassingCssStringUsingCustomTemplate()
 	{
-		$css = 'http://domain.dev/cache/filename.hash.css';
+		$css = 'http://domain.dev/cache/hash.timestamp.css';
 		$cssTagTemplate = '<link rel="stylesheet" type="text/css" media="screen" href="%s"/>';
 
 		minimee()->service->settings->cssTagTemplate = $cssTagTemplate;
@@ -171,8 +171,8 @@ class MinimeeServiceTest extends BaseTest
 	public function testMakeTagsByTypePassingCssArrayUsingCustomTemplate()
 	{
 		$cssArray = array(
-			'http://domain.dev/cache/filename.hash1.css',
-			'http://domain.dev/cache/filename.hash2.css'
+			'http://domain.dev/cache/hash1.timestamp.css',
+			'http://domain.dev/cache/hash2.timestamp.css'
 		);
 		$cssTagTemplate = '<link rel="stylesheet" type="text/css" media="screen" href="%s"/>';
 
@@ -189,7 +189,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakeTagsByTypePassingJsStringUsingDefaultTemplate()
 	{
-		$js = 'http://domain.dev/cache/filename.hash.js';
+		$js = 'http://domain.dev/cache/hash.timestamp.js';
 		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
 
 		$rendered = sprintf($jsTagTemplate, $js);
@@ -199,8 +199,8 @@ class MinimeeServiceTest extends BaseTest
 	public function testMakeTagsByTypePassingJsArrayUsingDefaultTemplate()
 	{
 		$jsArray = array(
-			'http://domain.dev/cache/filename.hash1.js',
-			'http://domain.dev/cache/filename.hash2.js'
+			'http://domain.dev/cache/hash1.timestamp.js',
+			'http://domain.dev/cache/hash2.timestamp.js'
 		);
 		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
 
@@ -215,7 +215,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakeTagsByTypePassingJsStringUsingCustomTemplate()
 	{
-		$js = 'http://domain.dev/cache/filename.hash.js';
+		$js = 'http://domain.dev/cache/hash.timestamp.js';
 		$jsTagTemplate = '<script src="%s" type="text/javascript" defer></script>';
 
 		minimee()->service->settings->jsTagTemplate = $jsTagTemplate;
@@ -228,8 +228,8 @@ class MinimeeServiceTest extends BaseTest
 	public function testMakeTagsByTypePassingJsArrayUsingCustomTemplate()
 	{
 		$jsArray = array(
-			'http://domain.dev/cache/filename.hash1.js',
-			'http://domain.dev/cache/filename.hash2.js'
+			'http://domain.dev/cache/hash1.timestamp.js',
+			'http://domain.dev/cache/hash2.timestamp.js'
 		);
 		$jsTagTemplate = '<script src="%s" type="text/javascript" defer></script>';
 
