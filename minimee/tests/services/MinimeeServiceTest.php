@@ -27,6 +27,16 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
+	public function testMakeHashOfCacheBase()
+	{
+		minimee()->service->cacheBase = 'asdf1234';
+
+		$makeHashOfCacheBase = $this->getMethod(minimee()->service, 'makeHashOfCacheBase');
+		$hashOfCacheBase = $makeHashOfCacheBase->invoke(minimee()->service);
+
+		$this->assertEquals(sha1(minimee()->service->cacheBase), $hashOfCacheBase);
+	}
+
 	public function testSetAssetsWhenLocalCss()
 	{
 		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
