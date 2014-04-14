@@ -42,7 +42,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakeCacheFilenameWhenUseResourceCacheReturnsFalse()
 	{
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
 			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
 
@@ -59,7 +59,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakeCacheFilenameWhenUseResourceCacheReturnsTrue()
 	{
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
 			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(true);
 
@@ -77,7 +77,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakePathToCacheFilenameWhenUseResourceCacheReturnsFalse()
 	{
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
 			$settingsModelMock->shouldReceive('getCachePath')->andReturn('/usr/var/www/html/cache/');
@@ -97,7 +97,7 @@ class MinimeeServiceTest extends BaseTest
 
 	public function testMakePathToCacheFilenameWhenUseResourceCacheReturnsTrue()
 	{
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(true);
 			$settingsModelMock->shouldReceive('getCachePath')->andReturn('/usr/var/www/html/cache/');
@@ -228,7 +228,7 @@ class MinimeeServiceTest extends BaseTest
 	{
 		minimee()->service->type = 'css';
 
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn(true);
 
@@ -244,7 +244,7 @@ class MinimeeServiceTest extends BaseTest
 	{
 		minimee()->service->type = 'css';
 
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn(false);
 
@@ -295,7 +295,7 @@ class MinimeeServiceTest extends BaseTest
 	{
 		$css = 'http://domain.dev/cache/hash.timestamp.css';
 
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('getAttribute')->with('cssTagTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
 
@@ -315,7 +315,7 @@ class MinimeeServiceTest extends BaseTest
 			'http://domain.dev/cache/hash2.timestamp.css'
 		);
 
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('getAttribute')->with('cssTagTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
 
@@ -337,7 +337,7 @@ class MinimeeServiceTest extends BaseTest
 	{
 		$js = 'http://domain.dev/cache/hash.timestamp.js';
 
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('getAttribute')->with('jsTagTemplate')->andReturn('<script src="%s"></script>');
 
@@ -357,7 +357,7 @@ class MinimeeServiceTest extends BaseTest
 			'http://domain.dev/cache/hash2.timestamp.js'
 		);
 
-		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('getAttribute')->with('jsTagTemplate')->andReturn('<script src="%s"></script>');
 
