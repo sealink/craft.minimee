@@ -115,6 +115,40 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals('/usr/var/www/html/cache/' . $hashOfCacheBase . '.css', $makePathToCacheFilename->invoke(minimee()->service));
 	}
 
+	public function testMakePathToHashOfCacheBaseWhenUseResourceCacheReturnsFalse()
+	{
+		minimee()->extend('makeSettingsModel', function() {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
+			$settingsModelMock->shouldReceive('getCachePath')->andReturn('/usr/var/www/html/cache/');
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->cacheBase = 'base';
+		$hashOfCacheBase = sha1('base');
+
+		$makePathToHashOfCacheBase = $this->getMethod(minimee()->service, 'makePathToHashOfCacheBase');
+		$this->assertEquals('/usr/var/www/html/cache/' . $hashOfCacheBase, $makePathToHashOfCacheBase->invoke(minimee()->service));
+	}
+
+	public function testMakePathToHashOfCacheBaseWhenUseResourceCacheReturnsTrue()
+	{
+		minimee()->extend('makeSettingsModel', function() {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(true);
+			$settingsModelMock->shouldReceive('getCachePath')->andReturn('/usr/var/www/html/cache/');
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->cacheBase = 'base';
+		$hashOfCacheBase = sha1('base');
+
+		$makePathToHashOfCacheBase = $this->getMethod(minimee()->service, 'makePathToHashOfCacheBase');
+		$this->assertEquals('/usr/var/www/html/cache/' . $hashOfCacheBase, $makePathToHashOfCacheBase->invoke(minimee()->service));
+	}
+
 	public function testMakeHashOfCacheBase()
 	{
 		minimee()->service->cacheBase = 'asdf1234';
