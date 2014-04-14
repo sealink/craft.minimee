@@ -476,6 +476,11 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function makePathToCacheFilename()
 	{
+		if($this->settings->useResourceCache())
+		{
+			return craft()->path->getStoragePath() . self::ResourceTrigger . '/' . $this->makeCacheFilename();
+		}
+		
 		return $this->settings->cachePath . $this->makeCacheFilename();
 	}
 
