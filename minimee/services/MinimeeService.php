@@ -17,6 +17,7 @@
 class MinimeeService extends BaseApplicationComponent
 {
 	const TimestampZero         = '00000000';           // exact string representation of "zero" timestamp
+	const ResourceTrigger       = 'minimee';            // the trigger we use for our own resources
 
 	protected $_assets          = array();              // array of Minimee_AssetModelInterface
 	protected $_type            = '';                   // css or js
@@ -483,6 +484,11 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function makePathToHashOfCacheBase()
 	{
+		if($this->settings->useResourceCache())
+		{
+			return craft()->path->getStoragePath() . self::ResourceTrigger . '/' . $this->makeHashOfCacheBase();
+		}
+
 		return $this->settings->cachePath . $this->makeHashOfCacheBase();
 	}
 
@@ -493,7 +499,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if($this->settings->useResourceCache())
 		{
-			$path = '/minimee/' . $this->makeCacheFilename();
+			$path = '/' . self::ResourceTrigger . '/' . $this->makeCacheFilename();
 
 			$dateParam = craft()->resources->dateParam;
 			$params[$dateParam] = IOHelper::getLastTimeModified($this->makePathToCacheFilename())->getTimestamp();

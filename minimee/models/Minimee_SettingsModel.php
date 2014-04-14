@@ -124,39 +124,35 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
-	 * @return String
+	 * @return String|Bool
 	 */
 	public function getCachePath()
 	{
 		$value = parent::getAttribute('cachePath');
 
-		if($value)
+		if( ! $value)
 		{
-			$cachePath = craft()->config->parseEnvironmentString($value);
+			return false;
 		}
-		else
-		{
-			$cachePath = craft()->path->getStoragePath() . 'minimee/';
-		}
+
+		$cachePath = craft()->config->parseEnvironmentString($value);
 
 		return $this->forceTrailingSlash($cachePath);
 	}
 	
 	/**
-	 * @return String
+	 * @return String|Bool
 	 */
 	public function getCacheUrl()
 	{
 		$value = parent::getAttribute('cacheUrl');
 
-		if($value)
+		if( ! $value)
 		{
-			$cacheUrl = craft()->config->parseEnvironmentString($value);
+			return false;
 		}
-		else
-		{
-			$cacheUrl = UrlHelper::getResourceUrl('minimee');
-		}
+
+		$cacheUrl = craft()->config->parseEnvironmentString($value);
 
 		return $this->forceTrailingSlash($cacheUrl);
 	}

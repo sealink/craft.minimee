@@ -132,8 +132,21 @@ class MinimeeSettingsModelTest extends BaseTest
 		$this->assertEquals('http://domain.com/', $this->_model->baseUrl);
 	}
 
-	public function testGetCachePathWithValue()
+	public function testGetCachePathReturnsFalseWithoutValue()
 	{
+		$this->_populateWith(array());
+
+		$this->assertEquals(false, $this->_model->cachePath);
+	}
+
+	public function testGetCachePathHasTrailingSlash()
+	{
+		$this->_populateWith(array(
+			'cachePath' => '/var/www/public/cache'
+		));
+
+		$this->assertEquals('/var/www/public/cache/', $this->_model->cachePath);
+
 		$this->_populateWith(array(
 			'cachePath' => '/var/www/public/cache/'
 		));
@@ -141,73 +154,23 @@ class MinimeeSettingsModelTest extends BaseTest
 		$this->assertEquals('/var/www/public/cache/', $this->_model->cachePath);
 	}
 
-	public function testGetCachePathWithoutValue()
-	{
-		$path = m::mock('Craft\PathService')->makePartial();
-		$path->shouldReceive('getStoragePath')->andReturn('/var/www/craft/storage/');
-		$this->setComponent(craft(), 'path', $path);
-
-		$this->_populateWith(array());
-
-		$this->assertEquals('/var/www/craft/storage/minimee/', $this->_model->cachePath);
-	}
-
-	public function testGetCachePathHasTrailingSlash()
-	{
-		$this->_populateWith(array(
-			'cachePath' => '/var/ww/public/cache'
-		));
-
-		$this->assertEquals('/var/ww/public/cache/', $this->_model->cachePath);
-
-		$this->_populateWith(array(
-			'cachePath' => '/var/ww/public/cache/'
-		));
-
-		$this->assertEquals('/var/ww/public/cache/', $this->_model->cachePath);
-	}
-
 	public function testGetCachePathParsesEnvironmentVariable()
 	{
 		$config = m::mock('Craft\ConfigService')->makePartial();
-		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('/var/ww/public/cache/');
+		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('/var/www/public/cache/');
 		$this->setComponent(craft(), 'config', $config);
 
 		$this->_populateWith(array(
 			'cachePath' => '{stringToParse}'
 		));
 
-		$this->assertEquals('/var/ww/public/cache/', $this->_model->cachePath);
+		$this->assertEquals('/var/www/public/cache/', $this->_model->cachePath);
 	}
 
-	public function testGetCacheUrlWithValue()
+	public function testGetCacheUrlReturnsFalseWithoutValue()
 	{
-		$this->_populateWith(array(
-			'cacheUrl' => 'http://domain.com/cache/'
-		));
-
-		$this->assertEquals('http://domain.com/cache/', $this->_model->cacheUrl);
-	}
-
-	public function testGetCacheUrlWithoutValue()
-	{
-		// Attempt 1: Try alias mocking
-		// $urlHelper = m::mock('alias:\Craft\UrlHelper');
-		// $urlHelper->shouldReceive('getResourceUrl')->andReturn('http://domain.com/resources/minimee/');
-
-		// Attempt 2: Try to mock via PHPUnit
-		// $UrlHelper = $this->getMockClass(
-		// 	'Craft\UrlHelper',          // name of class to mock
-		// 	array('getResourceUrl') 	// list of methods to mock
-		// );
-		// $UrlHelper::staticExpects($this->any())
-		// 	->method('getResourceUrl')
-		// 	->will($this->returnValue('http://domain.com/resources/minimee/'));
- 
- 		// Until we can successfully mock UrlHelper::getResourceUrl(),
- 		// the below relies on the contents of craft/app/tests/bootstrap.php
 		$this->_populateWith(array());
-		$this->assertEquals('http://craft.dev/cpresources/minimee/', $this->_model->cacheUrl);
+		$this->assertEquals(false, $this->_model->cacheUrl);
 	}
 
 	public function testGetCacheUrlHasTrailingSlash()

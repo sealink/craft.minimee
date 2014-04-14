@@ -137,7 +137,6 @@ class MinimeeServiceTest extends BaseTest
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(true);
-			$settingsModelMock->shouldReceive('getCachePath')->andReturn('/usr/var/www/html/cache/');
 
 			return $settingsModelMock;
 		});
@@ -145,8 +144,13 @@ class MinimeeServiceTest extends BaseTest
 		minimee()->service->cacheBase = 'base';
 		$hashOfCacheBase = sha1('base');
 
+//		$resourceUrlBase = UrlHelper::getResourceUrl(MinimeeService::ResourceTrigger);
+		$resourcePathBase = craft()->path->getStoragePath() . MinimeeService::ResourceTrigger . '/';
+
+		$assertEquals = $resourcePathBase . $hashOfCacheBase;
+
 		$makePathToHashOfCacheBase = $this->getMethod(minimee()->service, 'makePathToHashOfCacheBase');
-		$this->assertEquals('/usr/var/www/html/cache/' . $hashOfCacheBase, $makePathToHashOfCacheBase->invoke(minimee()->service));
+		$this->assertEquals($assertEquals, $makePathToHashOfCacheBase->invoke(minimee()->service));
 	}
 
 	public function testMakeHashOfCacheBase()
