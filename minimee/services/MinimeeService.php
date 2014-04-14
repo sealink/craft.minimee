@@ -655,7 +655,7 @@ class MinimeeService extends BaseApplicationComponent
 
 		$runtimeSettings = array_merge(self::$_pluginSettings, $settingsOverrides);
 
-		$this->settings = Minimee_SettingsModel::populateModel($runtimeSettings);
+		$this->settings = minimee()->makeSettingsModel($runtimeSettings);
 
 		return $this;
 	}

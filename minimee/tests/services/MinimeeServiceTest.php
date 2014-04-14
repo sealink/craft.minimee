@@ -27,23 +27,51 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
-	public function makeCacheFilename()
+	public function testMakeCacheFilenameWhenUseResourceCacheReturnsFalse()
 	{
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
+
+			return $settingsModelMock;
+		});
+
 		minimee()->service->cacheBase = 'base';
 		minimee()->service->cacheTimestamp = '12345678';
 		minimee()->service->type = MinimeeType::Css;
 
 		$makeCacheFilename = $this->getMethod(minimee()->service, 'makeCacheFilename');
-		$this->assertEquals('base.12345678.css', $makeCacheFilename->invoke(minimee()->service));
-
+		$this->assertEquals(sha1('base') . '.12345678.css', $makeCacheFilename->invoke(minimee()->service));
 	}
 
-	public function testMakePathToCacheFilename()
+	public function testMakeCacheFilenameWhenUseResourceCacheReturnsTrue()
 	{
-		$settings = array(
-			'cachePath' => '/usr/var/www/html/cache/'
-		);
-		minimee()->service->settings = $settings;
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(true);
+
+			return $settingsModelMock;
+		});
+
+
+		minimee()->service->cacheBase = 'base';
+		minimee()->service->cacheTimestamp = '12345678';
+		minimee()->service->type = MinimeeType::Css;
+
+		$makeCacheFilename = $this->getMethod(minimee()->service, 'makeCacheFilename');
+		$this->assertEquals(sha1('base') . '.css', $makeCacheFilename->invoke(minimee()->service));
+	}
+
+	public function testMakePathToCacheFilenameWhenUseResourceCacheReturnsFalse()
+	{
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
+			$settingsModelMock->shouldReceive('getCachePath')->andReturn('/usr/var/www/html/cache/');
+
+			return $settingsModelMock;
+		});
+
 		minimee()->service->cacheBase = 'base';
 		minimee()->service->cacheTimestamp = '12345678';
 		minimee()->service->type = MinimeeType::Css;
@@ -52,6 +80,26 @@ class MinimeeServiceTest extends BaseTest
 
 		$makePathToCacheFilename = $this->getMethod(minimee()->service, 'makePathToCacheFilename');
 		$this->assertEquals('/usr/var/www/html/cache/' . $hashOfCacheBase . '.12345678.css', $makePathToCacheFilename->invoke(minimee()->service));
+	}
+
+	public function testMakePathToCacheFilenameWhenUseResourceCacheReturnsTrue()
+	{
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(true);
+			$settingsModelMock->shouldReceive('getCachePath')->andReturn('/usr/var/www/html/cache/');
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->cacheBase = 'base';
+		minimee()->service->cacheTimestamp = '12345678';
+		minimee()->service->type = MinimeeType::Css;
+
+		$hashOfCacheBase = sha1('base');
+
+		$makePathToCacheFilename = $this->getMethod(minimee()->service, 'makePathToCacheFilename');
+		$this->assertEquals('/usr/var/www/html/cache/' . $hashOfCacheBase . '.css', $makePathToCacheFilename->invoke(minimee()->service));
 	}
 
 	public function testMakeHashOfCacheBase()
@@ -166,7 +214,13 @@ class MinimeeServiceTest extends BaseTest
 	public function testIsCombineEnabledWhenTrue()
 	{
 		minimee()->service->type = 'css';
-		minimee()->service->settings->combineCssEnabled = true;
+
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn(true);
+
+			return $settingsModelMock;
+		});
 
 		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
 
@@ -176,21 +230,17 @@ class MinimeeServiceTest extends BaseTest
 	public function testIsCombineEnabledWhenFalse()
 	{
 		minimee()->service->type = 'css';
-		minimee()->service->settings->combineCssEnabled = false;
+
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn(false);
+
+			return $settingsModelMock;
+		});
 
 		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
 
 		$this->assertFalse($isCombineEnabled->invoke(minimee()->service));
-	}
-
-	public function testIsCombineEnabledNullWithoutType()
-	{
-		$reset = $this->getMethod(minimee()->service, 'reset');
-		$reset->invoke(minimee()->service);
-
-		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
-
-		$this->assertEquals(null, $isCombineEnabled->invoke(minimee()->service));
 	}
 
 	public function testSetMaxCacheTimestampAlwaysSetsMax()
@@ -228,21 +278,37 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals(MinimeeService::TimestampZero, $getCacheTimestamp->invoke(minimee()->service));
 	}
 
-	public function testMakeTagsByTypePassingCssStringUsingDefaultTemplate()
+	public function testMakeTagsByTypePassingCssString()
 	{
 		$css = 'http://domain.dev/cache/hash.timestamp.css';
+
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssTagTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
+
+			return $settingsModelMock;
+		});
+
 		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
 
 		$rendered = sprintf($cssTagTemplate, $css);
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $css));
 	}
 
-	public function testMakeTagsByTypePassingCssArrayUsingDefaultTemplate()
+	public function testMakeTagsByTypePassingCssArray()
 	{
 		$cssArray = array(
 			'http://domain.dev/cache/hash1.timestamp.css',
 			'http://domain.dev/cache/hash2.timestamp.css'
 		);
+
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssTagTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
+
+			return $settingsModelMock;
+		});
+
 		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
 
 		$rendered = '';
@@ -254,85 +320,38 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $cssArray));
 	}
 
-	public function testMakeTagsByTypePassingCssStringUsingCustomTemplate()
-	{
-		$css = 'http://domain.dev/cache/hash.timestamp.css';
-		$cssTagTemplate = '<link rel="stylesheet" type="text/css" media="screen" href="%s"/>';
-
-		minimee()->service->settings->cssTagTemplate = $cssTagTemplate;
-
-		$rendered = sprintf($cssTagTemplate, $css);
-
-		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $css));
-
-	}
-
-	public function testMakeTagsByTypePassingCssArrayUsingCustomTemplate()
-	{
-		$cssArray = array(
-			'http://domain.dev/cache/hash1.timestamp.css',
-			'http://domain.dev/cache/hash2.timestamp.css'
-		);
-		$cssTagTemplate = '<link rel="stylesheet" type="text/css" media="screen" href="%s"/>';
-
-		minimee()->service->settings->cssTagTemplate = $cssTagTemplate;
-
-		$rendered = '';
-		foreach($cssArray as $css)
-		{
-			$rendered .= sprintf($cssTagTemplate, $css);
-		}
-
-		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $cssArray));
-	}
-
-	public function testMakeTagsByTypePassingJsStringUsingDefaultTemplate()
+	public function testMakeTagsByTypePassingJsString()
 	{
 		$js = 'http://domain.dev/cache/hash.timestamp.js';
+
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('jsTagTemplate')->andReturn('<script src="%s"></script>');
+
+			return $settingsModelMock;
+		});
+
 		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
 
 		$rendered = sprintf($jsTagTemplate, $js);
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $js));
 	}
 
-	public function testMakeTagsByTypePassingJsArrayUsingDefaultTemplate()
+	public function testMakeTagsByTypePassingJsArray()
 	{
 		$jsArray = array(
 			'http://domain.dev/cache/hash1.timestamp.js',
 			'http://domain.dev/cache/hash2.timestamp.js'
 		);
+
+		minimee()->extend('makeSettingsModel', function($attributes = array()) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('jsTagTemplate')->andReturn('<script src="%s"></script>');
+
+			return $settingsModelMock;
+		});
+
 		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
-
-		$rendered = '';
-		foreach($jsArray as $js)
-		{
-			$rendered .= sprintf($jsTagTemplate, $js);
-		}
-
-		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $jsArray));
-	}
-
-	public function testMakeTagsByTypePassingJsStringUsingCustomTemplate()
-	{
-		$js = 'http://domain.dev/cache/hash.timestamp.js';
-		$jsTagTemplate = '<script src="%s" type="text/javascript" defer></script>';
-
-		minimee()->service->settings->jsTagTemplate = $jsTagTemplate;
-
-		$rendered = sprintf($jsTagTemplate, $js);
-
-		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $js));
-	}
-
-	public function testMakeTagsByTypePassingJsArrayUsingCustomTemplate()
-	{
-		$jsArray = array(
-			'http://domain.dev/cache/hash1.timestamp.js',
-			'http://domain.dev/cache/hash2.timestamp.js'
-		);
-		$jsTagTemplate = '<script src="%s" type="text/javascript" defer></script>';
-
-		minimee()->service->settings->jsTagTemplate = $jsTagTemplate;
 
 		$rendered = '';
 		foreach($jsArray as $js)
@@ -347,8 +366,8 @@ class MinimeeServiceTest extends BaseTest
 	{
 		minimee()->service->assets = array('/asset/css/style.css');
 		minimee()->service->type = MinimeeType::Css;
-		minimee()->service->settings = array(
-			'enabled' => true);
+		minimee()->service->settings = new Minimee_SettingsModel(array(
+			'enabled' => true));
 		minimee()->service->cacheBase = 'asset.css.style.css';
 		minimee()->service->cacheTimestamp = new DateTime('now');
 

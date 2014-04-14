@@ -69,6 +69,10 @@ class MinimeePlugin extends BasePlugin
 		minimee()->stash('plugin', $this);
 		minimee()->stash('service', craft()->minimee);
 
+		minimee()->extend('makeSettingsModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+			return new Minimee_SettingsModel($attributes);
+		});
+
 		$this->_bindEvents();
 	}
 
