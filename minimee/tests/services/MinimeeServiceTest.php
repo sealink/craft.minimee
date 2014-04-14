@@ -23,6 +23,19 @@ class MinimeeServiceTest extends BaseTest
 		minimee()->stash('plugin', new MinimeePlugin);
 		minimee()->stash('service', new MinimeeService);
 
+		// these may be overridden during individual tests
+		minimee()->extend('makeSettingsModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+			return new Minimee_SettingsModel($attributes);
+		});
+
+		minimee()->extend('makeLocalAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+			return new Minimee_LocalAssetModel($attributes);
+		});
+
+		minimee()->extend('makeRemoteAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+			return new Minimee_RemoteAssetModel($attributes);
+		});
+
 		// TODO: figure outo how to propery mock config so that we can run init()
 		//minimee()->service->init();
 	}
