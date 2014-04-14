@@ -73,6 +73,14 @@ class MinimeePlugin extends BasePlugin
 			return new Minimee_SettingsModel($attributes);
 		});
 
+		minimee()->extend('makeLocalAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+			return new Minimee_LocalAssetModel($attributes);
+		});
+
+		minimee()->extend('makeRemoteAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+			return new Minimee_RemoteAssetModel($attributes);
+		});
+
 		$this->_bindEvents();
 	}
 

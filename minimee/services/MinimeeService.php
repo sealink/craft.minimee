@@ -591,7 +591,7 @@ class MinimeeService extends BaseApplicationComponent
 					'filenamePath' => $asset
 				);
 
-				$this->_assets[] = Minimee_RemoteAssetModel::populateModel($model);
+				$this->_assets[] = minimee()->makeRemoteAssetModel($model);
 			}
 			else
 			{
@@ -601,7 +601,7 @@ class MinimeeService extends BaseApplicationComponent
 					'filenamePath' => $this->settings->filesystemPath . $asset
 				);
 
-				$this->_assets[] = Minimee_LocalAssetModel::populateModel($model);
+				$this->_assets[] = minimee()->makeLocalAssetModel($model);
 			}
 		}
 
