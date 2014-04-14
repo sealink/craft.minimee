@@ -99,6 +99,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function defineSettings()
 	{
+		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
 		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 
 		$settings = new Minimee_SettingsModel();
@@ -135,6 +136,7 @@ class MinimeePlugin extends BasePlugin
 
 	public function prepSettings($settings)
 	{
+		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
 		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 
 		$settingsModel = new Minimee_SettingsModel();

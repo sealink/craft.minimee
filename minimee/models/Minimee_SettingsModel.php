@@ -14,7 +14,7 @@
 /**
  * 
  */
-class Minimee_SettingsModel extends BaseModel
+class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 {
 	/**
 	 * @return string

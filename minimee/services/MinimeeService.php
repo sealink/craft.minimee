@@ -146,7 +146,7 @@ class MinimeeService extends BaseApplicationComponent
 		try
 		{
 			$this->reset()
-				 ->setSettings($settings)
+				 ->setRuntimeSettings($settings)
 				 ->setType($type)
 				 ->setAssets($assets)
 				 ->flightcheck()
@@ -163,7 +163,7 @@ class MinimeeService extends BaseApplicationComponent
 				foreach($assets as $asset)
 				{
 					$return[] = $this->reset()
-									 ->setSettings($settings)
+									 ->setRuntimeSettings($settings)
 									 ->setType($type)
 									 ->setAssets($asset)
 									 ->ensureCacheExists()
@@ -424,10 +424,10 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getSettings()
 	{
-		// if null, then set based on our inits
+		// if null, then set to an empty array
 		if(is_null($this->_settings))
 		{
-			$this->_settings = Minimee_SettingsModel::populateModel(self::$_pluginSettings);
+			$this->setRuntimeSettings(array());
 		}
 
 		return $this->_settings;
@@ -649,13 +649,26 @@ class MinimeeService extends BaseApplicationComponent
 	 * @param Array $settingsOverrides
 	 * @return void
 	 */
-	protected function setSettings($settingsOverrides)
+	protected function setRuntimeSettings($settingsOverrides)
 	{
 		$settingsOverrides = ( ! is_array($settingsOverrides)) ? array($settingsOverrides) : $settingsOverrides;
 
 		$runtimeSettings = array_merge(self::$_pluginSettings, $settingsOverrides);
 
-		$this->_settings = Minimee_SettingsModel::populateModel($runtimeSettings);
+		$this->settings = Minimee_SettingsModel::populateModel($runtimeSettings);
+
+		return $this;
+	}
+
+	/**
+	 * Manually pass in an instance of Minimee_ISettingsModel.
+	 *
+	 * @param Craft\Minimee_ISettingsModel $settings
+	 * @return void
+	 */
+	protected function setSettings(Minimee_ISettingsModel $settings)
+	{
+		$this->_settings = $settings;
 
 		return $this;
 	}
