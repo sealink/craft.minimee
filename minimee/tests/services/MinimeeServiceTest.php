@@ -40,6 +40,30 @@ class MinimeeServiceTest extends BaseTest
 		//minimee()->service->init();
 	}
 
+	public function testFlightcheckPasses()
+	{
+		minimee()->extend('makeSettingsModel', function() {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('enabled')->andreturn(true);
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Css;
+		minimee()->service->assets = array(
+			'/assets/css/normalise.css',
+			'/assets/css/style.css'
+		);
+
+		$flightcheck = $this->getMethod(minimee()->service, 'flightcheck');
+
+		// not yet ready to assert
+		// $this->assertTrue($flightcheck->invoke(minimee()->service));
+
+	}
+
 	public function testMakeCacheFilenameWhenUseResourceCacheReturnsFalse()
 	{
 		minimee()->extend('makeSettingsModel', function() {
