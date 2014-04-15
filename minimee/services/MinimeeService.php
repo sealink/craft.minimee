@@ -368,7 +368,7 @@ class MinimeeService extends BaseApplicationComponent
 		
 		if($this->settings->useResourceCache())
 		{
-			IOHelper::ensureFolderExists($this->settings->cachePath);
+			IOHelper::ensureFolderExists($this->makePathToStorageFolder());
 		}
 		else
 		{
@@ -376,11 +376,11 @@ class MinimeeService extends BaseApplicationComponent
 			{
 				throw new Exception(Craft::t('Minimee\'s Cache Folder does not exist: ' . $this->settings->cachePath));
 			}
-		}
 
-		if( ! IOHelper::isWritable($this->settings->cachePath))
-		{
-			throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
+			if( ! IOHelper::isWritable($this->settings->cachePath))
+			{
+				throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
+			}
 		}
 
 		if( ! $this->assets)
@@ -480,7 +480,7 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			return craft()->path->getStoragePath() . self::ResourceTrigger . '/' . $this->makeCacheFilename();
 		}
-		
+
 		return $this->settings->cachePath . $this->makeCacheFilename();
 	}
 
@@ -491,10 +491,18 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if($this->settings->useResourceCache())
 		{
-			return craft()->path->getStoragePath() . self::ResourceTrigger . '/' . $this->makeHashOfCacheBase();
+			return $this->makePathToStorageFolder() . $this->makeHashOfCacheBase();
 		}
 
 		return $this->settings->cachePath . $this->makeHashOfCacheBase();
+	}
+
+	/**
+	 * @return String
+	 */
+	protected function makePathToStorageFolder()
+	{
+		return craft()->path->getStoragePath() . self::ResourceTrigger . '/';
 	}
 
 	/**
