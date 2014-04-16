@@ -25,15 +25,15 @@ class MinimeeServiceTest extends BaseTest
 		minimee()->stash('service', new MinimeeService);
 
 		// these may be overridden during individual tests
-		minimee()->extend('makeSettingsModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeSettingsModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_SettingsModel($attributes);
 		});
 
-		minimee()->extend('makeLocalAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeLocalAssetModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_LocalAssetModel($attributes);
 		});
 
-		minimee()->extend('makeRemoteAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeRemoteAssetModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_RemoteAssetModel($attributes);
 		});
 
@@ -540,6 +540,6 @@ if (!function_exists('\\Craft\\minimee'))
 {
 	function minimee()
 	{
-		return \SelvinOrtiz\Zit\Zit::getInstance();
+		return Zit::getInstance();
 	}
 }

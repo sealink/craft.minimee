@@ -2,6 +2,7 @@
 namespace Craft;
 
 use \Mockery as m;
+use \SelvinOrtiz\Zit\Zit;
 
 class MinimeeLocalAssetModelTest extends BaseTest
 {
@@ -18,7 +19,7 @@ class MinimeeLocalAssetModelTest extends BaseTest
 		
 		$this->_autoload();
 
-		minimee()->extend('makeLocalAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeLocalAssetModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_LocalAssetModel($attributes);
 		});
 	}
@@ -162,6 +163,6 @@ if (!function_exists('\\Craft\\minimee'))
 {
 	function minimee()
 	{
-		return \SelvinOrtiz\Zit\Zit::getInstance();
+		return Zit::getInstance();
 	}
 }

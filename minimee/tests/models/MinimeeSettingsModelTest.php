@@ -2,6 +2,7 @@
 namespace Craft;
 
 use \Mockery as m;
+use \SelvinOrtiz\Zit\Zit;
 
 class MinimeeSettingsModelTest extends BaseTest
 {
@@ -18,7 +19,7 @@ class MinimeeSettingsModelTest extends BaseTest
 		
 		$this->_autoload();
 
-		minimee()->extend('makeSettingsModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeSettingsModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_SettingsModel($attributes);
 		});
 	}
@@ -400,6 +401,6 @@ if (!function_exists('\\Craft\\minimee'))
 {
 	function minimee()
 	{
-		return \SelvinOrtiz\Zit\Zit::getInstance();
+		return Zit::getInstance();
 	}
 }
