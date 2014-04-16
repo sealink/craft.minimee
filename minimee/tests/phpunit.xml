@@ -4,9 +4,10 @@
 	convertNoticesToExceptions = "true"
 	convertWarningsToExceptions = "false"
 	stopOnFailure = "false"
-	syntaxCheck="true"
-	verbose="true"
-	strict="false">
+	syntaxCheck = "true"
+	verbose = "true"
+	strict = "false"
+	bootstrap = "bootstrap.php">
 
     <testsuites>
         <testsuite name="MinimeeTests">

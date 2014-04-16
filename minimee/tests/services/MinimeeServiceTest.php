@@ -4,22 +4,11 @@ namespace Craft;
 use \Mockery as m;
 use \SelvinOrtiz\Zit\Zit;
 
-class MinimeeServiceTest extends BaseTest
+class MinimeeServiceTest extends MinimeeBaseTest
 {
 	public function setUp()
 	{
-		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
-
 		$this->_autoload();
-
-        // $this->config = m::mock('Craft\ConfigService');
-        // $this->config->shouldReceive('getIsInitialized')->andReturn(true);
-        // $this->config->shouldReceive('get')->with('usePathInfo')->andReturn(true)->byDefault();
-        // $this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn(false)->byDefault();
-        // $this->config->shouldReceive('get')->with('resourceTrigger')->andReturn('resource')->byDefault();
-        // $this->config->shouldReceive('get')->with('version')->andReturn('2.0');
-
-        // $this->setComponent(craft(), 'config', $this->config);
 
 		minimee()->stash('plugin', new MinimeePlugin);
 		minimee()->stash('service', new MinimeeService);
@@ -36,6 +25,15 @@ class MinimeeServiceTest extends BaseTest
 		minimee()->extend('makeRemoteAssetModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_RemoteAssetModel($attributes);
 		});
+
+        // $this->config = m::mock('Craft\ConfigService');
+        // $this->config->shouldReceive('getIsInitialized')->andReturn(true);
+        // $this->config->shouldReceive('get')->with('usePathInfo')->andReturn(true)->byDefault();
+        // $this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn(false)->byDefault();
+        // $this->config->shouldReceive('get')->with('resourceTrigger')->andReturn('resource')->byDefault();
+        // $this->config->shouldReceive('get')->with('version')->andReturn('2.0');
+
+        // $this->setComponent(craft(), 'config', $this->config);
 
 		// TODO: figure outo how to propery mock config so that we can run init()
 		//minimee()->service->init();
@@ -512,34 +510,11 @@ class MinimeeServiceTest extends BaseTest
 
 	protected function _autoload()
 	{
-		// our tests use this
-		require_once __DIR__ . '/../../library/vendor/autoload.php';
-
 		// These are usually automatically loaded by Craft
 		Craft::import('plugins.minimee.MinimeePlugin');
 		Craft::import('plugins.minimee.services.MinimeeService');
 
 		// This is loaded via MinimeePlugin::init()
 		Craft::import('plugins.minimee.enums.MinimeeType');
-
-		// this usually happens in MinimeePlugin::init()
-		require_once __DIR__ . '/../vendor/autoload.php';
-
-		// And these Craft can usually autoload
-		// require_once __DIR__ . '/../../models/Minimee_BaseAssetModel.php';
-		// require_once __DIR__ . '/../../models/Minimee_LocalAssetModel.php';
-		// require_once __DIR__ . '/../../models/Minimee_RemoveAssetModel.php';
-		// require_once __DIR__ . '/../../models/Minimee_SettingsModel.php';
-	}
-}
-
-/**
- * A way to grab the dependency container within the Craft namespace
- */
-if (!function_exists('\\Craft\\minimee'))
-{
-	function minimee()
-	{
-		return Zit::getInstance();
 	}
 }

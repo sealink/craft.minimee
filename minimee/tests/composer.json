@@ -3,6 +3,9 @@
 		"classmap" : [
 			"../models",
 			"../services"
+		],
+		"files": [
+			"MinimeeBaseTest.php"
 		]
 	},
     "require-dev": {

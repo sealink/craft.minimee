@@ -4,7 +4,7 @@ namespace Craft;
 use \Mockery as m;
 use \SelvinOrtiz\Zit\Zit;
 
-class MinimeeLocalAssetModelTest extends BaseTest
+class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 {
 	protected $_model;
 
@@ -15,10 +15,6 @@ class MinimeeLocalAssetModelTest extends BaseTest
 	 */
 	public function setUp()
 	{
-		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
-		
-		$this->_autoload();
-
 		minimee()->extend('makeLocalAssetModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_LocalAssetModel($attributes);
 		});
@@ -130,20 +126,6 @@ class MinimeeLocalAssetModelTest extends BaseTest
 		$this->assertEquals('//domain.com/cache', $this->_model->filenameUrl);
 	}
 
-	protected function _autoload()
-	{
-		// our tests use this
-		require_once __DIR__ . '/../../library/vendor/autoload.php';
-
-		// this usually happens in MinimeePlugin::init()
-		require_once __DIR__ . '/../vendor/autoload.php';
-	}
-
-	protected function _inspect($data)
-	{
-		fwrite(STDERR, print_r($data));
-	}
-
 	/**
 	 * Internal method for shorthand populating our Minimee_LocalAssetModel
 	 * 
@@ -153,16 +135,5 @@ class MinimeeLocalAssetModelTest extends BaseTest
 	protected function _populateWith($attributes)
 	{
 		$this->_model = minimee()->makeLocalAssetModel($attributes);
-	}
-}
-
-/**
- * A way to grab the dependency container within the Craft namespace
- */
-if (!function_exists('\\Craft\\minimee'))
-{
-	function minimee()
-	{
-		return Zit::getInstance();
 	}
 }
