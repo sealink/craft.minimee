@@ -1,5 +1,9 @@
 <?php namespace Craft;
 
+use \Guzzle\Http\Client;
+use \Guzzle\Http\ClientInterface;
+use \SelvinOrtiz\Zit\Zit;
+
 /**
  * Minimee by John D Wells
  *
@@ -69,16 +73,20 @@ class MinimeePlugin extends BasePlugin
 		minimee()->stash('plugin', $this);
 		minimee()->stash('service', craft()->minimee);
 
-		minimee()->extend('makeSettingsModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeSettingsModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_SettingsModel($attributes);
 		});
 
-		minimee()->extend('makeLocalAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeLocalAssetModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_LocalAssetModel($attributes);
 		});
 
-		minimee()->extend('makeRemoteAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+		minimee()->extend('makeRemoteAssetModel', function(Zit $zit, $attributes = array()) {
 			return new Minimee_RemoteAssetModel($attributes);
+		});
+
+		minimee()->extend('makeClient', function(Zit $zit) {
+			return new Client;
 		});
 
 		$this->_bindEvents();
@@ -215,6 +223,6 @@ if (!function_exists('\\Craft\\minimee'))
 {
 	function minimee()
 	{
-		return \SelvinOrtiz\Zit\Zit::getInstance();
+		return Zit::getInstance();
 	}
 }

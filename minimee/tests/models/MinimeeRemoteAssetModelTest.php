@@ -4,6 +4,7 @@ namespace Craft;
 use \Guzzle\Http\Client as Client;
 use \Guzzle\Plugin\Mock\MockPlugin as MockPlugin;
 use \Guzzle\Http\Message\Response as Response;
+use \SelvinOrtiz\Zit\Zit;
 use \Mockery as m;
 
 class MinimeeRemoteAssetModelTest extends BaseTest
@@ -21,21 +22,29 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		
 		$this->_autoload();
 
-		minimee()->extend('makeRemoteAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array(), $client = null) {
+		minimee()->extend('makeRemoteAssetModel', function(Zit $zit, $attributes = array(), $client = null) {
 			return new Minimee_RemoteAssetModel($attributes, $client);
+		});
+
+		minimee()->extend('makeClient', function() {
+			return new Client;
 		});
 	}
 
 	public function testGetContentsSendsRequestOnlyOnce()
 	{
-		$mock = new MockPlugin();
-		$mock->addResponse(new Response(200, array(), '* { color: red }'));
-		$mock->addResponse(new Response(404));
+		minimee()->extend('makeClient', function() {
+			$mock = new MockPlugin();
+			$mock->addResponse(new Response(200, array(), '* { color: red }'));
+			$mock->addResponse(new Response(404));
 
-		$client = new Client();
-		$client->addSubscriber($mock);
+			$client = new Client();
+			$client->addSubscriber($mock);
 
-		$remoteAsset = minimee()->makeRemoteAssetModel(array(), $client);
+			return $client;
+		});
+
+		$remoteAsset = minimee()->makeRemoteAssetModel(array());
 
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
@@ -46,28 +55,36 @@ class MinimeeRemoteAssetModelTest extends BaseTest
      */
 	public function testGetContentsIfNotExists()
 	{
-		$mock = new MockPlugin();
-		$mock->addResponse(new Response(404));
+		minimee()->extend('makeClient', function() {
+			$mock = new MockPlugin();
+			$mock->addResponse(new Response(404));
 
-		$client = new Client();
-		$client->addSubscriber($mock);
+			$client = new Client();
+			$client->addSubscriber($mock);
+
+			return $client;
+		});
 
 		$remoteAsset = minimee()->makeRemoteAssetModel(array(
 			'filenamePath' => 'http://domain.dev/thisfilewillnotexist'
-		), $client);
+		));
 
 		$contents = $remoteAsset->contents;
 	}
 	
 	public function testGetContentsIfExists()
 	{
-		$mock = new MockPlugin();
-		$mock->addResponse(new Response(200, array(), '* { color: red }'));
+		minimee()->extend('makeClient', function() {
+			$mock = new MockPlugin();
+			$mock->addResponse(new Response(200, array(), '* { color: red }'));
 
-		$client = new Client();
-		$client->addSubscriber($mock);
+			$client = new Client();
+			$client->addSubscriber($mock);
 
-		$remoteAsset = minimee()->makeRemoteAssetModel(array(), $client);
+			return $client;
+		});
+
+		$remoteAsset = minimee()->makeRemoteAssetModel(array());
 
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
 	}
@@ -162,6 +179,6 @@ if (!function_exists('\\Craft\\minimee'))
 {
 	function minimee()
 	{
-		return \SelvinOrtiz\Zit\Zit::getInstance();
+		return Zit::getInstance();
 	}
 }

@@ -2,6 +2,7 @@
 namespace Craft;
 
 use \Mockery as m;
+use \SelvinOrtiz\Zit\Zit;
 
 class MinimeeServiceTest extends BaseTest
 {

@@ -1,8 +1,5 @@
 <?php namespace Craft;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\ClientInterface;
-
 /**
  * Minimee by John D Wells
  *
@@ -103,13 +100,6 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 	 */ 
 	protected function _getInstanceOfClient()
 	{
-		if($this->_client)
-		{
-			return $this->_client;
-		}
-		else
-		{
-			return new Client();
-		}
+		return minimee()->makeClient();
 	}
 }
