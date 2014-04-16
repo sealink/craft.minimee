@@ -105,6 +105,7 @@ class MinimeePlugin extends BasePlugin
 		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
 		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 
+		// we don't use DI here because defineSettings() may get run without first running init()
 		$settings = new Minimee_SettingsModel();
 
 		return $settings->defineAttributes();
@@ -142,6 +143,7 @@ class MinimeePlugin extends BasePlugin
 		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
 		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 
+		// we don't use DI here because prepSettings() may get run without first running init()
 		$settingsModel = new Minimee_SettingsModel();
 
 		return $settingsModel->prepSettings($settings);
