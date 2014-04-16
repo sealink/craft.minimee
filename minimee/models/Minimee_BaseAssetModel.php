@@ -16,6 +16,7 @@
  */
 class Minimee_BaseAssetModel extends BaseModel implements Minimee_IAssetModel
 {
+	const TimestampZero = '0000000000';
 	/*
 	 * These are internal attributes only, not defined by Minimee_BaseAssetModel::defineAttributes()
 	 * They are read-only, accessiable via magic getters e.g. $asset->contents or $asset->getContents()
@@ -66,7 +67,7 @@ class Minimee_BaseAssetModel extends BaseModel implements Minimee_IAssetModel
 	{
 		if($this->_lastTimeModified === null)
 		{
-			$this->_lastTimeModified = DateTime::createFromString('0000000000');
+			$this->_lastTimeModified = DateTime::createFromString(self::TimestampZero);
 		}
 
 		return $this->_lastTimeModified;

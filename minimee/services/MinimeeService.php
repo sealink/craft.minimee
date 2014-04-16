@@ -16,7 +16,7 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
-	const TimestampZero         = '00000000';           // exact string representation of "zero" timestamp
+	const TimestampZero         = '0000000000';         // exact string representation of "zero" timestamp
 	const ResourceTrigger       = 'minimee';            // the trigger we use for our own resources
 
 	protected $_assets          = array();              // array of Minimee_AssetModelInterface

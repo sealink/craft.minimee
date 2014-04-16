@@ -16,6 +16,8 @@
  */
 class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 {
+	const TimestampZero = '0000000000';
+
 	protected $_client;
 
 	public function __construct($attributes = array(), ClientInterface $client = null)
@@ -60,7 +62,7 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 	 */
 	public function getLastTimeModified()
 	{
-		return DateTime::createFromString('0000000000');
+		return DateTime::createFromString(self::TimestampZero);
 	}
 
 	/**
