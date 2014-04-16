@@ -16,7 +16,11 @@ class MinimeeSettingsModelTest extends BaseTest
 	{
 		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
 		
-		require_once __DIR__ . '/../vendor/autoload.php';
+		$this->_autoload();
+
+		minimee()->extend('makeSettingsModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array()) {
+			return new Minimee_SettingsModel($attributes);
+		});
 	}
 
 	public function testGetTagTemplatesWhenEmpty()
@@ -218,14 +222,14 @@ class MinimeeSettingsModelTest extends BaseTest
 
 	public function testForceTrailingSlashWithSlash()
 	{
-		$model = new Minimee_SettingsModel;
+		$model = minimee()->makeSettingsModel;
 
 		$this->assertEquals('string/', $model->forceTrailingSlash('string/'));
 	}
 
 	public function testForceTrailingSlashWithoutSlash()
 	{
-		$model = new Minimee_SettingsModel;
+		$model = minimee()->makeSettingsModel;
 
 		$this->assertEquals('string/', $model->forceTrailingSlash('string'));
 	}
@@ -243,7 +247,7 @@ class MinimeeSettingsModelTest extends BaseTest
 	 */
 	public function testPrepSettingsCastBools($zeroOne)
 	{
-		$model = new Minimee_SettingsModel;
+		$model = minimee()->makeSettingsModel;
 
 		// Bools are saved as 0s and 1s in DB
 		$prepped = $model->prepSettings(
@@ -363,6 +367,15 @@ class MinimeeSettingsModelTest extends BaseTest
 		$this->assertArrayHasKey('cacheUrl', $errors);
 	}
 
+	protected function _autoload()
+	{
+		// our tests use this
+		require_once __DIR__ . '/../../library/vendor/autoload.php';
+
+		// this usually happens in MinimeePlugin::init()
+		require_once __DIR__ . '/../vendor/autoload.php';
+	}
+
 	protected function _inspect($data)
 	{
 		fwrite(STDERR, print_r($data));
@@ -376,6 +389,17 @@ class MinimeeSettingsModelTest extends BaseTest
 	 */
 	protected function _populateWith($attributes)
 	{
-		$this->_model = Minimee_SettingsModel::populateModel($attributes);
+		$this->_model = minimee()->makeSettingsModel($attributes);
+	}
+}
+
+/**
+ * A way to grab the dependency container within the Craft namespace
+ */
+if (!function_exists('\\Craft\\minimee'))
+{
+	function minimee()
+	{
+		return \SelvinOrtiz\Zit\Zit::getInstance();
 	}
 }

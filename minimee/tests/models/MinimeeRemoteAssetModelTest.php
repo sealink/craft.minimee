@@ -19,7 +19,11 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 	{
 		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
 		
-		require_once __DIR__ . '/../vendor/autoload.php';
+		$this->_autoload();
+
+		minimee()->extend('makeRemoteAssetModel', function(\SelvinOrtiz\Zit\Zit $zit, $attributes = array(), $client = null) {
+			return new Minimee_RemoteAssetModel($attributes, $client);
+		});
 	}
 
 	public function testGetContentsSendsRequestOnlyOnce()
@@ -31,7 +35,7 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		$client = new Client();
 		$client->addSubscriber($mock);
 
-		$remoteAsset = new Minimee_RemoteAssetModel(array(), $client);
+		$remoteAsset = minimee()->makeRemoteAssetModel(array(), $client);
 
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
@@ -48,7 +52,7 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		$client = new Client();
 		$client->addSubscriber($mock);
 
-		$remoteAsset = new Minimee_RemoteAssetModel(array(
+		$remoteAsset = minimee()->makeRemoteAssetModel(array(
 			'filenamePath' => 'http://domain.dev/thisfilewillnotexist'
 		), $client);
 
@@ -63,7 +67,7 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		$client = new Client();
 		$client->addSubscriber($mock);
 
-		$remoteAsset = new Minimee_RemoteAssetModel(array(), $client);
+		$remoteAsset = minimee()->makeRemoteAssetModel(array(), $client);
 
 		$this->assertEquals('* { color: red }', $remoteAsset->contents);
 	}
@@ -125,6 +129,15 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 		$this->assertEquals('//domain.com/cache', $this->_model->filenameUrl);
 	}
 
+	protected function _autoload()
+	{
+		// our tests use this
+		require_once __DIR__ . '/../../library/vendor/autoload.php';
+
+		// this usually happens in MinimeePlugin::init()
+		require_once __DIR__ . '/../vendor/autoload.php';
+	}
+
 	protected function _inspect($data)
 	{
 		fwrite(STDERR, print_r($data));
@@ -138,6 +151,17 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 	 */
 	protected function _populateWith($attributes)
 	{
-		$this->_model = Minimee_RemoteAssetModel::populateModel($attributes);
+		$this->_model = minimee()->makeRemoteAssetModel($attributes);
+	}
+}
+
+/**
+ * A way to grab the dependency container within the Craft namespace
+ */
+if (!function_exists('\\Craft\\minimee'))
+{
+	function minimee()
+	{
+		return \SelvinOrtiz\Zit\Zit::getInstance();
 	}
 }

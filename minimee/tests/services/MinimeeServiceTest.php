@@ -9,7 +9,7 @@ class MinimeeServiceTest extends BaseTest
 	{
 		$_SERVER['SERVER_SOFTWARE'] = 'Apache';
 
-		$this->autoload();
+		$this->_autoload();
 
         // $this->config = m::mock('Craft\ConfigService');
         // $this->config->shouldReceive('getIsInitialized')->andReturn(true);
@@ -509,7 +509,7 @@ class MinimeeServiceTest extends BaseTest
 		$this->assertTrue($isUrl->invokeArgs(minimee()->service, array($url)));
 	}
 
-	protected function autoload()
+	protected function _autoload()
 	{
 		// our tests use this
 		require_once __DIR__ . '/../../library/vendor/autoload.php';
