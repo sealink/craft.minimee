@@ -62,7 +62,7 @@ class MinimeePlugin extends BasePlugin
 	}
 
 	/**
-	 * Hook & Event binding is done during initialisation
+	 * Autoloading, Dependency Injection, Hook & Event binding
 	 * 
 	 * @return Void
 	 */
@@ -70,24 +70,7 @@ class MinimeePlugin extends BasePlugin
 	{
 		$this->_autoload();
 
-		minimee()->stash('plugin', $this);
-		minimee()->stash('service', craft()->minimee);
-
-		minimee()->extend('makeSettingsModel', function(Zit $zit, $attributes = array()) {
-			return new Minimee_SettingsModel($attributes);
-		});
-
-		minimee()->extend('makeLocalAssetModel', function(Zit $zit, $attributes = array()) {
-			return new Minimee_LocalAssetModel($attributes);
-		});
-
-		minimee()->extend('makeRemoteAssetModel', function(Zit $zit, $attributes = array()) {
-			return new Minimee_RemoteAssetModel($attributes);
-		});
-
-		minimee()->extend('makeClient', function(Zit $zit) {
-			return new Client;
-		});
+		$this->_registerMinimeeDI();
 
 		$this->_bindEvents();
 	}
@@ -213,6 +196,33 @@ class MinimeePlugin extends BasePlugin
 		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
 
 		Craft::import('plugins.minimee.enums.MinimeeType');
+	}
+
+	/**
+	 * Registers all Dependency Injection
+	 *
+	 * @return Void
+	 */
+	protected function _registerMinimeeDI()
+	{
+		minimee()->stash('plugin', $this);
+		minimee()->stash('service', craft()->minimee);
+
+		minimee()->extend('makeSettingsModel', function(Zit $zit, $attributes = array()) {
+			return new Minimee_SettingsModel($attributes);
+		});
+
+		minimee()->extend('makeLocalAssetModel', function(Zit $zit, $attributes = array()) {
+			return new Minimee_LocalAssetModel($attributes);
+		});
+
+		minimee()->extend('makeRemoteAssetModel', function(Zit $zit, $attributes = array()) {
+			return new Minimee_RemoteAssetModel($attributes);
+		});
+
+		minimee()->extend('makeClient', function(Zit $zit) {
+			return new Client;
+		});
 	}
 }
 
