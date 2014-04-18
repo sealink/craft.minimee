@@ -313,16 +313,17 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function isCombineEnabled()
 	{
-		switch($this->type)
-		{
+		switch($this->type) :
 			case MinimeeType::Css :
-				return (bool) $this->settings->combineCssEnabled;
+				$isCombineEnabled = (bool) $this->settings->combineCssEnabled;
 			break;
 
 			case MinimeeType::Js :
-				return (bool) $this->settings->combineJsEnabled;
+				$isCombineEnabled = (bool) $this->settings->combineJsEnabled;
 			break;
-		}
+		endswitch;
+
+		return $isCombineEnabled;
 	}
 
 	/**
