@@ -26,17 +26,225 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			return new Minimee_RemoteAssetModel($attributes);
 		});
 
-        // $this->config = m::mock('Craft\ConfigService');
-        // $this->config->shouldReceive('getIsInitialized')->andReturn(true);
-        // $this->config->shouldReceive('get')->with('usePathInfo')->andReturn(true)->byDefault();
-        // $this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn(false)->byDefault();
-        // $this->config->shouldReceive('get')->with('resourceTrigger')->andReturn('resource')->byDefault();
-        // $this->config->shouldReceive('get')->with('version')->andReturn('2.0');
+        $this->config = m::mock('Craft\ConfigService');
+        $this->config->shouldReceive('getIsInitialized')->andReturn(true);
+        $this->config->shouldReceive('getLocalized')->andReturn(true);
+        $this->config->shouldReceive('get')->with('usePathInfo')->andReturn(true)->byDefault();
+        $this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn(false)->byDefault();
+        $this->config->shouldReceive('get')->with('resourceTrigger')->andReturn('resource')->byDefault();
+        $this->config->shouldReceive('get')->with('version')->andReturn('2.0');
+        $this->config->shouldReceive('get')->with('translationDebugOutput')->andReturn(false);
+        $this->config->shouldReceive('maxPowerCaptain')->andreturn(null);
 
-        // $this->setComponent(craft(), 'config', $this->config);
+        $this->setComponent(craft(), 'config', $this->config);
 
 		// TODO: figure outo how to propery mock config so that we can run init()
 		//minimee()->service->init();
+	}
+
+	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsTrue()
+	{
+		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
+		$assetContentsWrite = file_get_contents(__DIR__ . '/../assets/css/style.2.rewrite.min.css');
+
+		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
+			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
+			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://domain.dev/assets/css/style.2.css');
+			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
+
+			return $localAssetModelMock;
+		});
+
+		minimee()->extend('makeSettingsModel', function() use ($assetContents) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
+				'minifyCssEnabled'
+			));
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Css;
+
+		$asset = minimee()->makeLocalAssetModel();
+
+		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
+		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+
+	}
+
+	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsFalse()
+	{
+		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
+		$assetContentsWrite = file_get_contents(__DIR__ . '/../assets/css/style.2.rewrite.css');
+
+		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
+			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
+			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://domain.dev/assets/css/style.2.css');
+			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
+
+			return $localAssetModelMock;
+		});
+
+		minimee()->extend('makeSettingsModel', function() use ($assetContents) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
+				'minifyCssEnabled'
+			));
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Css;
+
+		$asset = minimee()->makeLocalAssetModel();
+
+		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
+		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+	}
+
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsFalse()
+	{
+		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.1.css');
+
+		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
+			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
+			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('');
+			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
+
+			return $localAssetModelMock;
+		});
+
+		minimee()->extend('makeSettingsModel', function() use ($assetContents) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
+				'minifyCssEnabled'
+			));
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Css;
+
+		$asset = minimee()->makeLocalAssetModel();
+
+		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
+		$this->assertEquals($assetContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+	}
+
+	public function testMinifyJsAssetWhenMinifyJsEnabledIsFalse()
+	{
+		$assetContents = file_get_contents(__DIR__ . '/../assets/js/script.1.js');
+
+		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
+			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
+			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('');
+			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
+
+			return $localAssetModelMock;
+		});
+
+		minimee()->extend('makeSettingsModel', function() use ($assetContents) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
+				'minifyJsEnabled'
+			));
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyJsEnabled')->andreturn(false);
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Js;
+
+		$asset = minimee()->makeLocalAssetModel();
+
+		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
+		$this->assertEquals($assetContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+	}
+
+	public function testMinifyJsAssetWhenMinifyJsEnabledIsTrue()
+	{
+		$assetContents = file_get_contents(__DIR__ . '/../assets/js/script.1.js');
+		$assetMinifiedContents = file_get_contents(__DIR__ . '/../assets/js/script.1.min.js');
+
+		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
+			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
+			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('');
+			$contents = $assetContents;
+			$localAssetModelMock->shouldReceive('getContents')->andReturn($contents);
+
+			return $localAssetModelMock;
+		});
+
+		minimee()->extend('makeSettingsModel', function() {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
+				'minifyJsEnabled'
+			));
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyJsEnabled')->andreturn(true);
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Js;
+
+		$asset = minimee()->makeLocalAssetModel();
+
+		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
+		$this->assertEquals($assetMinifiedContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+	}
+
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsTrue()
+	{
+		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.1.css');
+		$assetMinifiedContents = file_get_contents(__DIR__ . '/../assets/css/style.1.min.css');
+
+		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
+			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
+			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('');
+			$contents = $assetContents;
+			$localAssetModelMock->shouldReceive('getContents')->andReturn($contents);
+
+			return $localAssetModelMock;
+		});
+
+		minimee()->extend('makeSettingsModel', function() {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
+				'minifyCssEnabled'
+			));
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Css;
+
+		$asset = minimee()->makeLocalAssetModel();
+
+		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
+		$this->assertEquals($assetMinifiedContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
 	public function testFlightcheckPasses()
@@ -303,13 +511,37 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		$setType->invokeArgs(minimee()->service, array('CSS'));
     }
 
-	public function testIsCombineEnabledWhenTrue()
+    public function dataProviderIsEnabledReturnsTrue()
+    {
+		// the first element is the type we check;
+		// the second element is the other type, which should have no impact
+    	return [
+    		[true, true],
+    		[true, false]
+    	];
+    }
+
+    public function dataProviderIsEnabledReturnsFalse()
+    {
+		// the first element is the type we check;
+		// the second element is the other type, which should have no impact
+    	return [
+    		[false, true],
+    		[false, false]
+    	];
+    }
+
+	/**
+	 * @dataProvider dataProviderIsEnabledReturnsTrue
+	 */
+	public function testIsCombineEnabledReturnsTrueWhenTypeIsCss($combineCssEnabled, $combineJsEnabled)
 	{
 		minimee()->service->type = 'css';
 
-		minimee()->extend('makeSettingsModel', function() {
+		minimee()->extend('makeSettingsModel', function() use ($combineCssEnabled, $combineJsEnabled) {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
-			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn($combineCssEnabled);
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineJsEnabled')->andReturn($combineJsEnabled);
 
 			return $settingsModelMock;
 		});
@@ -319,13 +551,18 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		$this->assertTrue($isCombineEnabled->invoke(minimee()->service));
 	}
 
-	public function testIsCombineEnabledWhenFalse()
+
+	/**
+	 * @dataProvider dataProviderIsEnabledReturnsFalse
+	 */
+	public function testIsCombineEnabledReturnsFalseWhenTypeIsCss($combineCssEnabled, $combineJsEnabled)
 	{
 		minimee()->service->type = 'css';
 
-		minimee()->extend('makeSettingsModel', function() {
+		minimee()->extend('makeSettingsModel', function() use ($combineCssEnabled, $combineJsEnabled) {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
-			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn(false);
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn($combineCssEnabled);
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineJsEnabled')->andReturn($combineJsEnabled);
 
 			return $settingsModelMock;
 		});
@@ -334,6 +571,47 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$this->assertFalse($isCombineEnabled->invoke(minimee()->service));
 	}
+
+	/**
+	 * @dataProvider dataProviderIsEnabledReturnsTrue
+	 */
+	public function testIsCombineEnabledReturnsTrueWhenTypeIsJs($combineJsEnabled, $combineCssEnabled)
+	{
+		minimee()->service->type = 'js';
+
+		minimee()->extend('makeSettingsModel', function() use ($combineCssEnabled, $combineJsEnabled) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn($combineCssEnabled);
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineJsEnabled')->andReturn($combineJsEnabled);
+
+			return $settingsModelMock;
+		});
+
+		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
+
+		$this->assertTrue($isCombineEnabled->invoke(minimee()->service));
+	}
+
+	/**
+	 * @dataProvider dataProviderIsEnabledReturnsFalse
+	 */
+	public function testIsCombineEnabledReturnsFalseeWhenTypeIsJs($combineJsEnabled, $combineCssEnabled)
+	{
+		minimee()->service->type = 'js';
+
+		minimee()->extend('makeSettingsModel', function() use ($combineCssEnabled, $combineJsEnabled) {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineCssEnabled')->andReturn($combineCssEnabled);
+			$settingsModelMock->shouldReceive('getAttribute')->with('combineJsEnabled')->andReturn($combineJsEnabled);
+
+			return $settingsModelMock;
+		});
+
+		$isCombineEnabled = $this->getMethod(minimee()->service, 'isCombineEnabled');
+
+		$this->assertFalse($isCombineEnabled->invoke(minimee()->service));
+	}
+
 
 	public function testSetMaxCacheTimestampAlwaysSetsMax()
 	{
