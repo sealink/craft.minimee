@@ -42,6 +42,21 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		//minimee()->service->init();
 	}
 
+	public function testAppendToCacheBase()
+	{
+		$appendToCacheBase = $this->getMethod(minimee()->service, 'appendToCacheBase');
+
+		$cacheBase1 = '/asset/css/file.1.css';
+		$cacheBase2 = '/asset/css/file.2.css';
+
+		$appendToCacheBase->invokeArgs(minimee()->service, array($cacheBase1));
+		$this->assertEquals($cacheBase1, minimee()->service->cacheBase);
+
+		$appendToCacheBase->invokeArgs(minimee()->service, array($cacheBase2));
+		$this->assertEquals($cacheBase1 . $cacheBase2, minimee()->service->cacheBase);
+
+	}
+
 	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsTrue()
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
