@@ -26,7 +26,7 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	public function testGetContentsThrowsExeptionWhenNotExists()
 	{
 		$this->_populateWith(array(
-			'filenamePath' => __DIR__ . '/../assets/404.txt'
+			'filenamePath' => __DIR__ . '/../assets/responseCodes/404.txt'
 		));
 
 		$contents = $this->_model->contents;
@@ -69,7 +69,7 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	public function testGetTimestampWhenNotExists()
 	{
 		$this->_populateWith(array(
-			'filenamePath' => __DIR__ . '/../assets/404.txt'
+			'filenamePath' => __DIR__ . '/../assets/responseCodes/404.txt'
 		));
 
 		$lastTimeModified = $this->_model->lastTimeModified;
@@ -87,7 +87,7 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	public function testExistsIsFalse()
 	{
 		$this->_populateWith(array(
-			'filenamePath' => __DIR__ . '/../assets/404.txt'
+			'filenamePath' => __DIR__ . '/../assets/responseCodes/404.txt'
 		));
 
 		$this->assertNotEquals(true, $this->_model->exists());
