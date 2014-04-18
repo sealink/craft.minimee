@@ -35,7 +35,7 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	public function testGetContentsWhenExists()
 	{
 		$this->_populateWith(array(
-			'filenamePath' => __DIR__ . '/../assets/200.txt'
+			'filenamePath' => __DIR__ . '/../assets/responseCodes/200.txt'
 		));
 
 		$this->assertEquals('200', $this->_model->contents);
@@ -43,7 +43,7 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 
 	public function testExistsUpdatesFilenamePath()
 	{
-		$filenamePath = __DIR__ . '/../assets/200.txt';
+		$filenamePath = __DIR__ . '/../assets/responseCodes/200.txt';
 
 		$this->_populateWith(array(
 			'filenamePath' => $filenamePath
@@ -57,7 +57,7 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	public function testGetTimestampWhenExists()
 	{
 		$this->_populateWith(array(
-			'filenamePath' => __DIR__ . '/../assets/200.txt'
+			'filenamePath' => __DIR__ . '/../assets/responseCodes/200.txt'
 		));
 
 		$this->assertInstanceOf('DateTime', $this->_model->lastTimeModified);
@@ -78,7 +78,7 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	public function testExistsIsTrue()
 	{
 		$this->_populateWith(array(
-			'filenamePath' => __DIR__ . '/../assets/200.txt'
+			'filenamePath' => __DIR__ . '/../assets/responseCodes/200.txt'
 		));
 
 		$this->assertNotEquals(false, $this->_model->exists());
@@ -96,10 +96,10 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	public function testToStringReturnsFilename()
 	{
 		$this->_populateWith(array(
-			'filename' => '/assets/200.txt'
+			'filename' => '/assets/responseCodes/200.txt'
 		));
 
-		$this->assertEquals('/assets/200.txt', sprintf($this->_model));
+		$this->assertEquals('/assets/responseCodes/200.txt', sprintf($this->_model));
 	}
 
 	public function testSetFilenamePathRemovesDoubleSlashes()
