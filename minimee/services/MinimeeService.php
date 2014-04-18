@@ -554,7 +554,7 @@ class MinimeeService extends BaseApplicationComponent
 
 				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
 
-				if($this->settings->minifyJsEnabled)
+				if($this->settings->minifyCssEnabled)
 				{
 					$contents = \Minify_CSS::minify($contents);
 				}
