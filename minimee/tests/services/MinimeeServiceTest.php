@@ -597,8 +597,10 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		$setType->invokeArgs(minimee()->service, array(MinimeeType::Css));
 		$this->assertSame(MinimeeType::Css, minimee()->service->type);
 
-		$setType->invokeArgs(minimee()->service, array(MinimeeType::Js));
+		$minimeeService = $setType->invokeArgs(minimee()->service, array(MinimeeType::Js));
+
 		$this->assertSame(MinimeeType::Js, minimee()->service->type);
+		$this->assertInstanceOf('\Craft\MinimeeService', $minimeeService);
 	}
 
 	/**
@@ -841,8 +843,9 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		minimee()->service->cacheTimestamp = new DateTime('now');
 
 		$reset = $this->getMethod(minimee()->service, 'reset');
-		$reset->invoke(minimee()->service);
+		$minimeeService = $reset->invoke(minimee()->service);
 
+		$this->assertInstanceOf('\Craft\MinimeeService', $minimeeService);
 		$this->assertSame(array(), minimee()->service->assets);
 		$this->assertInstanceOf('\Craft\Minimee_SettingsModel', minimee()->service->settings);
 		$this->assertSame('', minimee()->service->type);
