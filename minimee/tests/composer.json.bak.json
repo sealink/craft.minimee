@@ -2,8 +2,10 @@
 	"autoload" : {
 		"classmap" : [
 			"../models",
-			"../services",
-			"mocks"
+			"../services"
+		],
+		"files": [
+			"MinimeeBaseTest.php"
 		]
 	},
     "require-dev": {
