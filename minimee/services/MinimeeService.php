@@ -64,21 +64,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		parent::init();
 
-		self::$_pluginSettings = minimee()->plugin->getSettings()->getAttributes();
-
-		// as of v2.0 we can take filesystem configs
-		if(version_compare('2.0', craft()->getVersion(), '<='))
-		{
-			foreach(self::$_pluginSettings as $attribute => $value)
-			{
-				if(craft()->config->exists($attribute, 'minimee'))
-				{
-					self::$_pluginSettings[$attribute] = craft()->config->get($attribute, 'minimee');
-				}
-			}
-		}
-
-		MinimeePlugin::log(Craft::t('Minimee has been initialised.'));
+		$this->initPluginSettings();
 	}
 
 	/**
@@ -304,6 +290,30 @@ class MinimeeService extends BaseApplicationComponent
 		$this->onCreateCache(new Event($this));
 
 		return true;
+	}
+	
+	/**
+	 * Fetch settings from our plugin / config
+	 *
+	 * @return Void
+	 */
+	protected function initPluginSettings()
+	{
+		self::$_pluginSettings = minimee()->plugin->getSettings()->getAttributes();
+
+		// as of v2.0 we can take filesystem configs
+		if(version_compare('2.0', craft()->getVersion(), '<='))
+		{
+			foreach(self::$_pluginSettings as $attribute => $value)
+			{
+				if(craft()->config->exists($attribute, 'minimee'))
+				{
+					self::$_pluginSettings[$attribute] = craft()->config->get($attribute, 'minimee');
+				}
+			}
+		}
+
+		MinimeePlugin::log(Craft::t('Minimee has been initialised.'));
 	}
 
 	/**
