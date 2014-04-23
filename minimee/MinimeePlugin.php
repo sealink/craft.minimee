@@ -102,8 +102,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function defineSettings()
 	{
-		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
-		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
+		$this->_autoload();
 
 		// we don't use DI here because defineSettings() may get run without first running init()
 		$settings = new Minimee_SettingsModel();
@@ -140,8 +139,7 @@ class MinimeePlugin extends BasePlugin
 
 	public function prepSettings($settings)
 	{
-		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
-		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
+		$this->_autoload();
 
 		// we don't use DI here because prepSettings() may get run without first running init()
 		$settingsModel = new Minimee_SettingsModel();
@@ -198,6 +196,8 @@ class MinimeePlugin extends BasePlugin
 		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
 
 		Craft::import('plugins.minimee.enums.MinimeeType');
+		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
+		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 	}
 
 	/**
