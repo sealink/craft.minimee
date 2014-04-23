@@ -291,6 +291,31 @@ class MinimeeService extends BaseApplicationComponent
 
 		return true;
 	}
+
+	/**
+	 * set plugin / config settings
+	 *
+	 * @return Void
+	 */
+	protected setPluginSettings($settings = array())
+	{
+		self::$_pluginSettings = $settings;
+	}
+
+	/**
+	 * get our plugin / config settings
+	 *
+	 * @return Array
+	 */
+	protected function getPluginSettings()
+	{
+		if( ! self::$_pluginSettings)
+		{
+			$this->initPluginSettings();
+		}
+
+		return self::$_pluginSettings;
+	}
 	
 	/**
 	 * Fetch settings from our plugin / config
@@ -299,19 +324,21 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function initPluginSettings()
 	{
-		self::$_pluginSettings = minimee()->plugin->getSettings()->getAttributes();
+		$settings = minimee()->plugin->getSettings()->getAttributes();
 
 		// as of v2.0 we can take filesystem configs
 		if(version_compare('2.0', craft()->getVersion(), '<='))
 		{
-			foreach(self::$_pluginSettings as $attribute => $value)
+			foreach($settings as $attribute => $value)
 			{
 				if(craft()->config->exists($attribute, 'minimee'))
 				{
-					self::$_pluginSettings[$attribute] = craft()->config->get($attribute, 'minimee');
+					$settings[$attribute] = craft()->config->get($attribute, 'minimee');
 				}
 			}
 		}
+
+		$this->setPluginSettings($settings);
 
 		MinimeePlugin::log(Craft::t('Minimee has been initialised.'));
 	}
@@ -683,7 +710,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$settingsOverrides = ( ! is_array($settingsOverrides)) ? array($settingsOverrides) : $settingsOverrides;
 
-		$runtimeSettings = array_merge(self::$_pluginSettings, $settingsOverrides);
+		$runtimeSettings = array_merge($this->getPluginSettings(), $settingsOverrides);
 
 		$this->settings = minimee()->makeSettingsModel($runtimeSettings);
 
