@@ -297,7 +297,7 @@ class MinimeeService extends BaseApplicationComponent
 	 *
 	 * @return Void
 	 */
-	protected setPluginSettings($settings = array())
+	protected function setPluginSettings($settings = array())
 	{
 		self::$_pluginSettings = $settings;
 	}
